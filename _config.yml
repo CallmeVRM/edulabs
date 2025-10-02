@@ -1,6 +1,6 @@
 title: "Edulabs"
 description: "Documentation et plus"
-theme: just-the-docs
+remote_theme: just-the-docs/just-the-docs
 url: "https://edulabs.fr"
 baseurl: ""  # important si le site est à la racine du domaine
 permalink: pretty

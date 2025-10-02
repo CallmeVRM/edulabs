@@ -1,6 +1,42 @@
-title: Just the Docs Template
-description: A starter template for a Jeykll site using the Just the Docs theme!
+title: "Edulabs"
+description: "Documentation et plus"
 theme: just-the-docs
+baseurl: ""
+url: "https://edulabs.fr/"
+permalink: pretty
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-github-metadata
+  - jekyll-include-cache
+  - jekyll-sitemap
+
+search_enabled: true
+enable_copy_code_button: true
+heading_anchors: true
+
+aux_links:
+  "Edulabs sur GitHub":
+    - ""
+
+gh_edit_link: false
+gh_edit_link_text: "Modifier cette page sur GitHub"
+gh_edit_repository: "https://callmevrm.github.io/edulabs.fr"
+gh_edit_branch: "main"
+gh_edit_view_mode: "tree"
+
+color_scheme: light
+
+footer_content: '© 2025 Edulabs. Distribué sous <a href="https://github.com/callmevrm/edulabs.github.io/blob/main/LICENSE">MIT License</a>.'
+footer_content_license: ""
+
+
+
+
+
+
+
+
 
 url: https://just-the-docs.github.io
 

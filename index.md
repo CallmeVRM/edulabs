@@ -4,44 +4,42 @@ layout: home
 nav_order: 1
 ---
 
-# Bienvenue
+# Bienvenue sur Edulabs
 
-Je m'appelle **Lotfi Hamadene** et je suis la personne derrière l'initiative **Edulabs**, une plateforme francophone où le partage et la pratique est au kernel de tout.  
+Je m’appelle Lotfi Hamadene et je suis à l’origine d’Edulabs, une initiative francophone où je partage mes réflexions, mes découvertes et mes projets autour des technologies Cloud, DevOps et Sysadmin.
 
-L'objectif d'Edulabs : permettre aux apprenants quelque soit leur niveau de **découvrir, comprendre et pratiquer** les technologies dans un contexte réaliste et immersif.  
+Edulabs est à la fois :
 
-## Notre vision 
-Edulabs n’est pas seulement une plateforme d'apprentissage classique :
+- Un espace personnel où je documente mes tests de technologies, mes résolutions de bugs et mes trouvailles du quotidien.
+- Une plateforme d’apprentissage en construction, conçue pour mettre l’accent sur la pratique combiné à la théorie fondmentale.
 
-C’est un **espace stimulant** où l’apprentissage se veut :  
-- **Accessible** : des contenus clairs, structurés et en français.  
-- **Pratique** : des labs conçus pour reproduire des **situations réelles**.  
-- **Scénarisé** : chaque exercice raconte une histoire, afin de rendre la pratique **plus engageante et mémorable**.  
+## Ma vision
 
-## Ce que vous trouverez
-- Des **labs pratiques** autour de Linux, Azure, Kubernetes, Podman, Incus et d’autres technologies Cloud & DevOps & Devsecops.  
-- Des **astuces** pour mieux exploiter vos environnements de travail et vos outils quotidiens.  
-- Des **parcours pédagogiques** qui vous accompagnent pas à pas dans votre montée en compétences orientée pratique.  
+Edulabs n’a pas vocation à être une énième plateforme théorique. Mon objectif est de créer un espace :
+
+- Accessible : avec des contenus clairs et en français.
+- Pratique : des labs concrets qui reproduisent de vraies situations.
+- Évolutif : du simple partage d’un outil utile jusqu’à des parcours pédagogiques immersifs.
+
+## Ce que vous trouverez ici
+
+- Des retours d’expérience sur Linux, Azure, Kubernetes, Podman, Incus et d’autres technos Cloud & DevOps & DevSecOps.
+- Des solutions et astuces face aux problèmes rencontrés au quotidien.
+- Des scénarios de labs réalistes, pensés pour renforcer vos compétences et surtout votre confiance.
 
 ## Pourquoi Edulabs ?
 
-Lors de mon propre parcours en informatique, j’ai été confronté à une réalité frustrante, aussi bien en école qu’en autodidacte sur des plateformes payantes et reconnues.  
+Au fil de mon parcours, j’ai constaté que la plupart des labs proposés ailleurs étaient trop :
+- Simplistes : utiles pour débuter, mais loin de la réalité du terrain.
+- Guidés : pratiques pour apprendre une commande, mais peu formateurs en autonomie.
+- Scénarisés mais déconnectés : intéressants, mais rarement proches des vrais défis d’un administrateur ou d’un ingénieur.
 
-Les labs proposés étaient souvent :  
-- **Trop simplistes** : par exemple, déployer un serveur DHCP ou DNS..., OK ce sont des notions utiles à comprendre certes, mais ce n’est pas ce que fait de vous un administrateur système au quotidien. 
-Ce genre d’exercices manque de profondeur et n’aide pas vraiment à saisir les défis réels face aux technos "Regarder sous le capot".  
-- **Guidés pas à pas** : pratiques pour mémoriser des commandes et s'initier, mais sans autonomie réelle.  
-- **Scénarisés mais irréalistes** : certaines plateformes anglophones proposent des scénarios, mais ils sont souvent pauvre en contenu ou pas trop réaliste. Ils ne reflètent pas certaines problématiques qu’un administrateur système ou un technicien rencontre sur le terrain.  
+Avec Edulabs, je veux proposer autre chose :
+- Une plateforme francophone,
+- Gratuite au maximum,
+- Qui vous aide à apprendre par la pratique, avec des situations inspirées du réel.
 
-J’ai aussi remarqué que beaucoup de stagiaires et d’apprenants francophones (des professionnels aussi) que j’ai rencontrés étaient freinés par la *barrière de la langue anglaise*. Bien que je conseille toujours de se former en anglais au moins technique, cela reste une charge cognitive supplémentaire pour beaucoup, et peut ralentir la progression *(Attention ! Les machines des labs sont exclusivement en anglais, le support est en français)*
+J’ai aussi remarqué que beaucoup de stagiaires et d’apprenants francophones (des professionnels aussi) que j’ai rencontrés étaient freinés par la *barrière de la langue anglaise*. Bien que je conseille toujours de se former en anglais au moins technique, cela reste une charge cognitive supplémentaire pour beaucoup, et peut ralentir la progression *(Attention ! Les machines des labs sont exclusivement en anglais, le support est en français avec des anglissimes)*
 
-C’est de là qu’est née l’idée d’**Edulabs** :  
-- Une plateforme **francophone**,  
-- **Gratuite au maximum**,  
-- Pensée pour celles et ceux qui veulent **progresser par la pratique et d'une façon plus au moins réaliste**.  
 
-Parce que, soyons honnêtes : peu importe les heures de théorie ou de “tryhard” que vous investissez, sans **mise en pratique concrète**, il restera toujours ce manque de confiance en vous — que ce soit lors d’un entretien ou face aux défis d’un nouveau poste.  
-
-👉 **Edulabs est là pour apporter une brique dans le but de combler ce vide** : vous donner des scénarios réalistes, guidés mais pas trop, pour renforcer vos compétences **et surtout votre confiance en vous**.  
-
-> “Apprendre, c’est faire. Et faire, c’est comprendre.”  
+👉 **Edulabs est là pour apporter une brique dans le monde de l'IT**

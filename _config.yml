@@ -5,7 +5,6 @@ url: "https://edulabs.fr"
 baseurl: ""  # important si le site est à la racine du domaine
 permalink: pretty
 
-
 plugins:
   - jekyll-remote-theme
   - jekyll-seo-tag
@@ -13,13 +12,9 @@ plugins:
   - jekyll-include-cache
   - jekyll-sitemap
 
-
 search_enabled: true
 enable_copy_code_button: true
 heading_anchors: true
-
-aux_links:
-  "Edulabs sur GitHub": https://github.com/callmevrm/edulabs
 
 gh_edit_link: false
 gh_edit_link_text: "Modifier cette page sur GitHub"

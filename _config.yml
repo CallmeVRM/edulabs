@@ -2,7 +2,7 @@ title: "Edulabs"
 description: "Documentation et plus"
 theme: just-the-docs
 baseurl: ""
-url: "https://edulabs.fr/"
+url: "http://edulabs.fr/"
 permalink: pretty
 
 plugins:

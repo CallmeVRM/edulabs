@@ -21,7 +21,7 @@ aux_links:
 
 gh_edit_link: false
 gh_edit_link_text: "Modifier cette page sur GitHub"
-gh_edit_repository: "https://callmevrm.github.io/edulabs.fr"
+gh_edit_repository: "https://callmevrm.github.io/edulabs"
 gh_edit_branch: "main"
 gh_edit_view_mode: "tree"
 

@@ -109,16 +109,18 @@ Cette fonctionnalité n’est pas directement facturée, sauf si vous hébergez 
 
 ## 1. Création et délégation d’une zone DNS
 
-### Comprendre le rôle d’une zone DNS
+### Comprendre le rôle d’une zone DNS publique
 Une **zone DNS** dans Azure est une ressource qui héberge les enregistrements DNS d’un domaine. Lorsque vous créez une zone DNS dans **Azure DNS**, celle-ci se voit attribuer automatiquement **quatre serveurs de noms autoritatifs** (name servers) hébergés par Microsoft. Ces serveurs répondent aux requêtes DNS en fonction des enregistrements configurés dans la zone.
 
 > 💡 **Remarque :** Vous pouvez créer une zone DNS sans posséder le nom de domaine correspondant. Cependant, pour la rendre accessible publiquement, une **délégation de domaine** depuis le registrar est nécessaire.
 
+Il faut savoir que la zone DNS est par défaut Global, elle n'a donc pas de région spécifique de déploiement.
+
 ### Étapes de création d’une zone DNS
 1. Créez une ressource **DNS Zone** dans Azure via le portail, Azure CLI ou PowerShell.  
 2. Azure attribue automatiquement quatre serveurs de noms (ex. `ns1-xx.azure-dns.com`, `ns2-xx.azure-dns.net`, etc.).  
-3. Vérifiez les serveurs attribués dans le **portail Azure** ou à l’aide de la **CLI/PowerShell**. Chaque zone possède un ensemble de serveurs unique.
-4. Configurez la délégation du domaine auprès de votre **registrar** :
+3. Vérifiez les serveurs attribués dans le **portail Azure** ou à l’aide de la **CLI/PowerShell**. Chaque zone possède un ensemble de serveurs unique. `Azure Portal > VotreZoneDNS > Settings > Properties`
+4. Configurez la délégation du domaine auprès de votre **registrar** (OVH, namecheap...):
    - Remplacez les enregistrements **NS** existants par ceux fournis par Azure DNS.  
    - N’utilisez **jamais** de glue records pointant directement vers les adresses IP des serveurs Azure DNS (ces IP peuvent changer).
 
@@ -201,21 +203,29 @@ l’enregistrement devient vide, sans intervention manuelle.
 La **localisation** spécifiée lors de la création concerne uniquement le **groupe de ressources**, car les zones DNS sont **globales**.  
 Une fois la zone créée, les serveurs de noms apparaissent dans la section **Essentials** du portail Azure.
 
-### ➕ Création d’un enregistrement DNS
-- Accédez à la zone DNS → **+ Record Set**.  
+![alt text](image-1.png)
+
+Lors de la création de la zone, vous pouvez importer un fichier contenant les enregistrements de votre zone ou le rédiger manuellement.
+
+### Création d’un enregistrement DNS
+- Accédez à la zone DNS → DNS Management → **+ Record Set** → Add
 - Renseignez les champs :
   - **Name** : ex. `www`  
   - **Type** : A  
+  - **Alias record set** : No  
   - **TTL** : 1 heure (modifiable)  
   - **IP Address** : ajoutez une ou plusieurs adresses IPv4  
 
-### 🧩 Exemple d’Alias Record au niveau du domaine racine
+### Exemple d’Alias Record au niveau du domaine racine
 Pour un enregistrement au niveau du domaine (apex), utilisez :
-- **Name** : `@`  
+- **Name** : `aliaswww`  
 - **Type** : A  
 - **Alias Record Set** : Oui  
-- **Azure Resource** : Sélectionnez une adresse IP publique Azure  
+- **Azure resource** : vous avez le choix entre plusieurs options (Figure 1.2) ou  **Zone record set** : vous pouvez choisir un enregistrement dans la zone actuelle.
 - **TTL** : 1 heure  
+
+![alt text](image-3.png)
+Figure 1.2
 
 ---
 
@@ -231,10 +241,29 @@ Ce service offre :
 - Une **résolution Internet** pour les domaines publics.  
 
 Les noms internes suivent le format :  
-`<nom_VM>.<suffixe_dns>.internal.cloudapp.net`  
+`<nom_VM>.<suffixe_aléatoire_dns>.internal.cloudapp.net`  
 Ces noms ne sont résolus qu’à l’intérieur du réseau virtuel.
 
-### 🧱 Bring Your Own DNS (BYODNS)
+![alt text](image-4.png)
+Figure 1.3
+
+Ces deux vm on étaient déployer sans aucune configuration personnalisé du DNS.
+
+```bash
+azure@vm01:~$ ping vm01
+PING vm01.pncdymwalfue3izxlcvqxqceth.bx.internal.cloudapp.net (10.0.0.4) 56(84) bytes of data.
+64 bytes from vm01.internal.cloudapp.net (10.0.0.4): icmp_seq=1 ttl=64 time=0.018 ms
+64 bytes from vm01.internal.cloudapp.net (10.0.0.4): icmp_seq=2 ttl=64 time=0.020 ms
+64 bytes from vm01.internal.cloudapp.net (10.0.0.4): icmp_seq=3 ttl=64 time=0.019 ms
+
+azure@vm01:~$ ping vm02
+PING vm02.pncdymwalfue3izxlcvqxqceth.bx.internal.cloudapp.net (10.0.0.5) 56(84) bytes of data.
+64 bytes from vm02.internal.cloudapp.net (10.0.0.5): icmp_seq=1 ttl=64 time=1.34 ms
+64 bytes from vm02.internal.cloudapp.net (10.0.0.5): icmp_seq=2 ttl=64 time=2.38 ms
+64 bytes from vm02.internal.cloudapp.net (10.0.0.5): icmp_seq=3 ttl=64 time=0.930 ms
+```
+
+### Bring Your Own DNS (BYODNS)
 Vous pouvez remplacer le DNS fourni par Azure par vos **propres serveurs DNS**, hébergés :
 - dans Azure (sur une VM),  
 - sur site (on-premises), ou  
@@ -249,9 +278,20 @@ Cela permet :
 > 🔒 Les serveurs DNS personnalisés doivent offrir un service **récursif**, sinon la résolution Internet échouera.
 
 ### ⚙️ Configuration des DNS personnalisés
+On peut modifier l'implémentation du DNS à plusieurs niveaux, par exemple :
 - **Niveau VNet** : applique les DNS à toutes les VMs du réseau.  
-- **Niveau interface réseau (NIC)** : prioritaire sur le VNet.  
+- **Niveau interface réseau (NIC)** : par défaut, elle hérite du DNS du VNet, quand il est en mode custom il devient prioritaire sur le VNet.  
   > Si plusieurs VMs sont dans un *availability set*, les DNS configurés sur leurs interfaces sont fusionnés.
+
+**Au niveau du vnet** :
+
+![alt text](image-5.png)
+
+
+**Au niveau de l'interface réseau (NIC)** :
+
+![alt text](image-6.png)
+
 
 > ⚠️ Il n’est **pas possible** de définir des DNS au niveau du **sous-réseau (subnet)**.
 

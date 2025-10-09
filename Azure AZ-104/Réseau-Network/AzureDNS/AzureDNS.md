@@ -107,16 +107,16 @@ Cette fonctionnalité n’est pas directement facturée, sauf si vous hébergez 
 
 # 🌐 Gestion complète du DNS dans Azure
 
-## 1. Création et délégation d’une zone DNS
+## 1. Création et délégation d’une zone DNS publique
 
-### Comprendre le rôle d’une zone DNS publique
+### Comprendre le rôle d’une zone DNS
 Une **zone DNS** dans Azure est une ressource qui héberge les enregistrements DNS d’un domaine. Lorsque vous créez une zone DNS dans **Azure DNS**, celle-ci se voit attribuer automatiquement **quatre serveurs de noms autoritatifs** (name servers) hébergés par Microsoft. Ces serveurs répondent aux requêtes DNS en fonction des enregistrements configurés dans la zone.
 
 > 💡 **Remarque :** Vous pouvez créer une zone DNS sans posséder le nom de domaine correspondant. Cependant, pour la rendre accessible publiquement, une **délégation de domaine** depuis le registrar est nécessaire.
 
 Il faut savoir que la zone DNS est par défaut Global, elle n'a donc pas de région spécifique de déploiement.
 
-### Étapes de création d’une zone DNS
+### Étapes de création d’une zone DNS publique
 1. Créez une ressource **DNS Zone** dans Azure via le portail, Azure CLI ou PowerShell.  
 2. Azure attribue automatiquement quatre serveurs de noms (ex. `ns1-xx.azure-dns.com`, `ns2-xx.azure-dns.net`, etc.).  
 3. Vérifiez les serveurs attribués dans le **portail Azure** ou à l’aide de la **CLI/PowerShell**. Chaque zone possède un ensemble de serveurs unique. `Azure Portal > VotreZoneDNS > Settings > Properties`
@@ -168,20 +168,18 @@ Les **alias records** permettent de référencer directement des ressources Azur
 
 Un alias record est supporté dans Azure DNS pour les types A, AAAA et CNAME.
 
-  • Pour le type A / AAAA : pointez vers une IP publique Azure (ressource Public IP). 
-Microsoft Learn
+- Pour le type A / AAAA : pointez vers une IP publique Azure (ressource Public IP). 
+- Pour le type A / AAAA / CNAME : pointez vers un profil Traffic Manager — c’est particulièrement utile pour la gestion du trafic ou pour pouvoir utiliser un alias au niveau du domaine racine (zone apex), ce que les CNAME classiques ne permettent pas. 
 
-  • Pour le type A / AAAA / CNAME : pointez vers un profil Traffic Manager — c’est particulièrement utile pour la gestion du trafic ou pour pouvoir utiliser un alias au niveau du domaine racine (zone apex), ce que les CNAME classiques ne permettent pas. 
+**D’autres possibilités d’alias :**
 
-D’autres possibilités d’alias :
-  • vers un point de terminaison CDN Azure (utile pour héberger des sites statiques) 
-Microsoft Learn
-  • vers un autre record dans la même zone (référence interne) 
-Microsoft Learn
-  • vers un endpoint Front Door Azure pour personnaliser un domaine sur un front global.
+- vers un point de terminaison CDN Azure (utile pour héberger des sites statiques) 
+- vers un autre record dans la même zone (référence interne) 
+- vers un endpoint Front Door Azure pour personnaliser un domaine sur un front global.
 
 
-Dans le DNS classique, un enregistrement peut rester actif même si la ressource qu’il cible (IP, CNAME, etc.) a été supprimée.
+Dans le DNS classique, un enregistrement *peut rester actif* même si la ressource qu’il cible (IP, CNAME, etc.) a été supprimée.
+
 Résultat : le DNS pointe vers une adresse invalide — voire réattribuée — créant un risque d’erreur ou de détournement de trafic.
 
 Les alias records d’Azure DNS évitent ce problème en liant automatiquement le cycle de vie du DNS à celui de la ressource Azure.

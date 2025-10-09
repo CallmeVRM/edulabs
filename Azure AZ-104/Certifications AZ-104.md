@@ -1,7 +1,6 @@
 ---
 title: Certification AZ-104
-nav_order: 2
-parent: Microsoft
+nav_order: 10
 has_children: true
 ---
 

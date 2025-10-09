@@ -117,14 +117,19 @@ Une **zone DNS** dans Azure est une ressource qui héberge les enregistrements D
 Il faut savoir que la zone DNS est par défaut Global, elle n'a donc pas de région spécifique de déploiement.
 
 ### Étapes de création d’une zone DNS publique
-1. Créez une ressource **DNS Zone** dans Azure via le portail, Azure CLI ou PowerShell.  
-2. Azure attribue automatiquement quatre serveurs de noms (ex. `ns1-xx.azure-dns.com`, `ns2-xx.azure-dns.net`, etc.).  
-3. Vérifiez les serveurs attribués dans le **portail Azure** ou à l’aide de la **CLI/PowerShell**. Chaque zone possède un ensemble de serveurs unique. `Azure Portal > VotreZoneDNS > Settings > Properties`
-4. Configurez la délégation du domaine auprès de votre **registrar** (OVH, namecheap...):
+1. Créez une ressource **DNS Zone** dans Azure via le portail, Azure CLI ou PowerShell. 
+2. Lors de la création de la zone, vous pouvez importer un fichier contenant les enregistrements de votre zone ou le rédiger manuellement. 
+3. Azure attribue automatiquement quatre serveurs de noms (ex. `ns1-xx.azure-dns.com`, `ns2-xx.azure-dns.net`, etc.).  
+4. Vérifiez les serveurs attribués dans le **portail Azure** ou à l’aide de la **CLI/PowerShell**. Chaque zone possède un ensemble de serveurs unique. `Azure Portal > VotreZoneDNS > Settings > Properties`
+5. Configurez la délégation du domaine auprès de votre **registrar** (OVH, namecheap...):
    - Remplacez les enregistrements **NS** existants par ceux fournis par Azure DNS.  
    - N’utilisez **jamais** de glue records pointant directement vers les adresses IP des serveurs Azure DNS (ces IP peuvent changer).
 
 > 🚫 Les **vanity name servers** (serveurs dont le nom correspond à votre domaine) ne sont pas pris en charge.
+
+![alt text](image-1.png)
+
+![alt text](image-7.png)
 
 ### Délégation d’une zone enfant
 Azure traite les **zones enfants** comme des entités indépendantes. La délégation d’une sous-zone suit les mêmes étapes que pour une zone principale :
@@ -145,6 +150,27 @@ Chaque enregistrement DNS dans Azure comprend :
 - **RDATA** : contenu associé à l’enregistrement (adresse IP, nom de domaine, etc.).
 
 Les enregistrements de même nom et type forment un **record set (RRSet)**. Chaque record set peut contenir jusqu’à **20 enregistrements individuels**. Pour le **root domain**, utilisez le symbole `@`.
+
+
+### Création d’un enregistrement DNS
+- Accédez à la zone DNS → DNS Management → **+ Record Set** → Add
+- Renseignez les champs :
+  - **Name** : `www`  
+  - **Type** : A  
+  - **Alias record set** : No  
+  - **TTL** : 1 heure (modifiable)  
+  - **IP Address** : ajoutez une ou plusieurs adresses IPv4  
+
+### Exemple d’Alias Record au niveau du domaine racine
+Pour un enregistrement au niveau du domaine (apex), utilisez :
+- **Name** : `aliasdewww`  
+- **Type** : A  
+- **Alias Record Set** : Oui  
+- **Azure resource** : vous avez le choix entre plusieurs options (Figure 1.2) ou  **Zone record set** : vous pouvez choisir un enregistrement dans la zone actuelle.
+- **TTL** : 1 heure  
+
+![alt text](image-3.png)
+Figure 1.2
 
 ### Principaux types d’enregistrements pris en charge
 
@@ -185,49 +211,15 @@ Résultat : le DNS pointe vers une adresse invalide — voire réattribuée — 
 Les alias records d’Azure DNS évitent ce problème en liant automatiquement le cycle de vie du DNS à celui de la ressource Azure.
 Si la ressource (Public IP, Traffic Manager, etc.) change ou est supprimée :
 
-le DNS est mis à jour automatiquement, ou
+le DNS est mis à jour automatiquement, ou l’enregistrement devient vide, sans intervention manuelle.
 
-l’enregistrement devient vide, sans intervention manuelle.
-
-✅ Cela garantit une résolution propre, sans enregistrements orphelins, ni risque de redirection accidentelle.
+Cela garantit une résolution propre, sans enregistrements orphelins, ni risque de redirection accidentelle. ✅ 
 
 > Les Alias Records est une extension non définie dans les RFC DNS classiques. Il se peut qu'en dehors d’Azure (chez d'autres registars), le comportement équivalent doit être simulé manuellement.
 
 ---
 
-## 3. Création de zones et d’enregistrements DNS dans le Portail Azure
-
-### 📍 Localisation des zones DNS
-La **localisation** spécifiée lors de la création concerne uniquement le **groupe de ressources**, car les zones DNS sont **globales**.  
-Une fois la zone créée, les serveurs de noms apparaissent dans la section **Essentials** du portail Azure.
-
-![alt text](image-1.png)
-
-Lors de la création de la zone, vous pouvez importer un fichier contenant les enregistrements de votre zone ou le rédiger manuellement.
-
-### Création d’un enregistrement DNS
-- Accédez à la zone DNS → DNS Management → **+ Record Set** → Add
-- Renseignez les champs :
-  - **Name** : ex. `www`  
-  - **Type** : A  
-  - **Alias record set** : No  
-  - **TTL** : 1 heure (modifiable)  
-  - **IP Address** : ajoutez une ou plusieurs adresses IPv4  
-
-### Exemple d’Alias Record au niveau du domaine racine
-Pour un enregistrement au niveau du domaine (apex), utilisez :
-- **Name** : `aliaswww`  
-- **Type** : A  
-- **Alias Record Set** : Oui  
-- **Azure resource** : vous avez le choix entre plusieurs options (Figure 1.2) ou  **Zone record set** : vous pouvez choisir un enregistrement dans la zone actuelle.
-- **TTL** : 1 heure  
-
-![alt text](image-3.png)
-Figure 1.2
-
----
-
-## 4. Configuration des paramètres DNS personnalisés
+## 3. Configuration des paramètres DNS, Built-in et personnalisation :
 
 ### 🔧 Azure-provided DNS
 Par défaut, chaque machine virtuelle dans un **Virtual Network (VNet)** reçoit via **DHCP** :
@@ -261,7 +253,7 @@ PING vm02.pncdymwalfue3izxlcvqxqceth.bx.internal.cloudapp.net (10.0.0.5) 56(84) 
 64 bytes from vm02.internal.cloudapp.net (10.0.0.5): icmp_seq=3 ttl=64 time=0.930 ms
 ```
 
-### Bring Your Own DNS (BYODNS)
+### 🔧 Le principe du Bring Your Own DNS (BYODNS)
 Vous pouvez remplacer le DNS fourni par Azure par vos **propres serveurs DNS**, hébergés :
 - dans Azure (sur une VM),  
 - sur site (on-premises), ou  
@@ -275,10 +267,10 @@ Cela permet :
 
 > 🔒 Les serveurs DNS personnalisés doivent offrir un service **récursif**, sinon la résolution Internet échouera.
 
-### ⚙️ Configuration des DNS personnalisés
+### 🔧 Configuration des DNS personnalisés
 On peut modifier l'implémentation du DNS à plusieurs niveaux, par exemple :
 - **Niveau VNet** : applique les DNS à toutes les VMs du réseau.  
-- **Niveau interface réseau (NIC)** : par défaut, elle hérite du DNS du VNet, quand il est en mode custom il devient prioritaire sur le VNet.  
+- **Niveau interface réseau (NIC)** : par défaut, la carte réseau (NIC) hérite du DNS du VNet, quand on le passe sur le mode custom, il devient prioritaire sur le VNet.  
   > Si plusieurs VMs sont dans un *availability set*, les DNS configurés sur leurs interfaces sont fusionnés.
 
 **Au niveau du vnet** :
@@ -301,12 +293,12 @@ Après modification :
 
 ## 5. Zones DNS privées (Private DNS Zones)
 
-En plus des domaines publics, Azure DNS prend en charge les **zones privées**, permettant la résolution de noms **à l’intérieur des réseaux virtuels Azure**.
+En plus des zones DNS publics, Azure prend en charge les **zones DNS privées**, permettant la résolution de noms **au sein des réseaux virtuels Azure**.
 
 ### Avantages :
 - Utiliser vos **propres noms de domaine** internes (sans suffixe Azure).  
 - Bénéficier d’une **inscription automatique** des VMs dans la zone (pour le VNet enregistré).  
-- Éviter la gestion manuelle de serveurs DNS internes.
+- Éviter la gestion manuelle de serveurs DNS internes avec toute sa complexité.
 
 ### Fonctionnement :
 - Une zone privée peut être **liée à plusieurs VNets** :  

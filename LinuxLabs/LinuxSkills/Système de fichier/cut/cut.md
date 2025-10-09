@@ -3,6 +3,7 @@ title: cut
 parent: Système de fichier
 grand_parent: LinuxSkills
 nav_order: 2
+nav_exclude: true
 ---
 
 # 💡 Solutions du Lab Linux — Sprint 1

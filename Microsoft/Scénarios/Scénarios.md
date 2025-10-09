@@ -2,6 +2,7 @@
 title: Scénarios
 parent: Microsoft
 nav_order: 
+nav_exclude: true
 ---
 
 # Lab Microsoft — Scénarios

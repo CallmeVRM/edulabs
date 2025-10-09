@@ -2,8 +2,8 @@
 title: Labs
 parent: Certification AZ-104
 grand_parent: Microsoft
-nav_order: 4
+nav_order: 12
 ---
 
-# Azure VPN
+# Labs autour de Azure pour pratiquer la certification AZ-104
 

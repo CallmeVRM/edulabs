@@ -142,8 +142,9 @@ L’ordre des opérations est important : le squelette doit être prêt avant to
 - stop-incident04
 
 
-<h3 style="color: red; font-weight: bold;">Incident INC-01 — « Je suis dans le groupe mais je ne peux pas écrire - alice.dupont »</h3>
-
+<div style="border: 3px solid #774ae2ff; background-color: #f8f0ffff; padding: 15px; border-radius: 5px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+<h3 style="color: black; font-weight: bold;">Incident INC-01 : « Je suis dans le groupe mais je ne peux pas écrire - alice.dupont »</h3>
+</div>
 
 **Contexte** : - Alice (groupe `marketing`) essaye de créer un fichier dans `/lab/depts/marketing/share` mais obtient « *Permission denied* ».
 
@@ -154,7 +155,10 @@ L’ordre des opérations est important : le squelette doit être prêt avant to
 
 Vous devez résoudre ce ticket pour passer au suivant.
 
-<h3 style="color: red; font-weight: bold;">Incident INC-02 — « Oups, j'ai supprimé par erreur le fichier d'un collègue - alice.dupont »</h3>
+<div style="border: 3px solid #774ae2ff; background-color: #f8f0ffff; padding: 15px; border-radius: 5px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+<h3 style="color: black; font-weight: bold;">Incident INC-02 — « Oups, j'ai supprimé par erreur le fichier d'un collègue - alice.dupont »</h3>
+</div>
+
 
 **Contexte** : 
 
@@ -171,7 +175,9 @@ Or, selon la politique interne, chaque membre du groupe `marketing` doit pouvoir
 **Attendu** : Seuls les propriétaires peuvent supprimer leur propres fichiers (le root aussi, et ce n'est pas un piège).
 
 
-<h3 style="color: red; font-weight: bold;">Incident INC-03 — « Je n'arrive plus à changer mon mot de passe : Authentication token manipulation error - camel.chalal » </h3>
+<div style="border: 3px solid #774ae2ff; background-color: #f8f0ffff; padding: 15px; border-radius: 5px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+<h3 style="color: black; font-weight: bold;">Incident INC-03 — « Je n'arrive plus à changer mon mot de passe : Authentication token manipulation error - camel.chalal »</h3>
+</div>
 
 
 {: .important-title }
@@ -194,7 +200,7 @@ Pistes à creuser : `/etc/passwd` `/etc/shadow`
 
 
 <div style="border: 3px solid #774ae2ff; background-color: #f8f0ffff; padding: 15px; border-radius: 5px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-<h3 style="color: black; font-weight: bold;">Incident INC-04 — « Je n'arrive pas à me connecter en ssh avec la nouvelle clé  - camel.chalal »</h3></div>
+<h3 style="color: black; font-weight: bold;">Incident INC-04 : « Je n'arrive pas à me connecter en ssh avec la nouvelle clé  - camel.chalal »</h3></div>
   
 **Contexte** : 
 

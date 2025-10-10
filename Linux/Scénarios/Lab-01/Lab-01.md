@@ -78,8 +78,10 @@ Les incidents sont **déclenchés à la demande** via des commandes simples (voi
 
 *Règle d’or : réaliser les tickets dans l’ordre.*
 
-
-<h3 style="color: red; font-weight: bold;">Ticket 1 - Onboarding d’Alice Dupont </h3>
+<div style="border-left: 4px solid #6c757d; background-color: #f9f9f9; padding: 12px 20px; margin: 20px 0; font-family: 'Segoe UI', sans-serif; color: #333;">
+  <strong style="color: #6c757d;">🎫 Ticket 1 :</strong>  
+   Onboarding d’Alice Dupont
+</div>
 
 Les tâches à faire :
 1. Créer un compte `alice.dupont` (avec son propre /home et un shell /bin/bash).
@@ -88,7 +90,11 @@ Les tâches à faire :
 
 Astuces : ```useradd``` ```usermod``` ```passwd``` ```chage```
 
-<h3 style="color: red; font-weight: bold;">Ticket 2 - Groupe transverse com </h3>
+
+<div style="border-left: 4px solid #6c757d; background-color: #f9f9f9; padding: 12px 20px; margin: 20px 0; font-family: 'Segoe UI', sans-serif; color: #333;">
+  <strong style="color: #6c757d;">🎫 Ticket 2 :</strong>  
+   Groupe transverse com 
+</div>
 
 1. Vérifier ou créer le groupe `com`.
 2. Ajouter alice.dupont au groupe `com`, ce groupe doit être son groupe secondiare.
@@ -96,7 +102,10 @@ Astuces : ```useradd``` ```usermod``` ```passwd``` ```chage```
 Astuces : ```groupadd``` ```usermod```
 
 
-<h3 style="color: red; font-weight: bold;">Ticket 3 - Partage Marketing (setgid) (Dev)</h3>
+<div style="border-left: 4px solid #6c757d; background-color: #f9f9f9; padding: 12px 20px; margin: 20px 0; font-family: 'Segoe UI', sans-serif; color: #333;">
+  <strong style="color: #6c757d;">🎫 Ticket 3 :</strong>  
+   Partage Marketing (setgid) (Dev)
+</div>
 
 1. Sur /lab/depts/marketing/share, activer setgid et les droits d’équipe.
 
@@ -105,7 +114,11 @@ Résultat attendu : répertoire en 2770 ; lorsqu'un fichier est créé il hérit
 Astuces : `Le 2 active le setgid` `owner/groupe du dossier doivent être cohérents`.
 
 
-<h3 style="color: red; font-weight: bold;">Ticket 4 — Squelette &amp; Bob Martin (Dev)</h3>
+<div style="border-left: 4px solid #6c757d; background-color: #f9f9f9; padding: 12px 20px; margin: 20px 0; font-family: 'Segoe UI', sans-serif; color: #333;">
+  <strong style="color: #6c757d;">🎫 Ticket 4 :</strong>  
+   Squelette &amp; Bob Martin (Dev)
+</div>
+
 
 Le squelette utilisateur doit être mis à jour pour correspondre aux conventions internes actuelles. 
 

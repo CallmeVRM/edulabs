@@ -13,7 +13,10 @@ Cette page contient les corrections détaillées des tickets et incidents du Spr
 
 ## Tickets
 
-<h3 style="color: red; font-weight: bold;">Ticket 1 - Onboarding d’Alice Dupont </h3>
+<div style="border-left: 4px solid #6c757d; background-color: #f9f9f9; padding: 12px 20px; margin: 20px 0; font-family: 'Segoe UI', sans-serif; color: #333;">
+  <strong style="color: #6c757d;">🎫 Ticket 1 :</strong>  
+   Onboarding d’Alice Dupont
+</div>
 
 **Objectif**  
 - Créer `alice.dupont`
@@ -49,7 +52,10 @@ chage -l alice.dupont
 
 ---
 
-<h3 style="color: red; font-weight: bold;">Ticket 2 - Groupe transverse com </h3>
+<div style="border-left: 4px solid #6c757d; background-color: #f9f9f9; padding: 12px 20px; margin: 20px 0; font-family: 'Segoe UI', sans-serif; color: #333;">
+  <strong style="color: #6c757d;">🎫 Ticket 2 :</strong>  
+   Groupe transverse com 
+</div>
 
 **Objectif**  
 
@@ -74,7 +80,10 @@ id -nG alice.dupont | grep com
 
 ---
 
-<h3 style="color: red; font-weight: bold;">Ticket 3 - Partage Marketing (setgid) (Dev)</h3>
+<div style="border-left: 4px solid #6c757d; background-color: #f9f9f9; padding: 12px 20px; margin: 20px 0; font-family: 'Segoe UI', sans-serif; color: #333;">
+  <strong style="color: #6c757d;">🎫 Ticket 3 :</strong>  
+   Partage Marketing (setgid) (Dev)
+</div>
 
 **Objectif**  
 
@@ -113,7 +122,10 @@ ls -ld /lab/depts/marketing/share
 
 ---
 
-<h3 style="color: red; font-weight: bold;">Ticket 4 — Squelette &amp; Bob Martin (Dev)</h3>
+<div style="border-left: 4px solid #6c757d; background-color: #f9f9f9; padding: 12px 20px; margin: 20px 0; font-family: 'Segoe UI', sans-serif; color: #333;">
+  <strong style="color: #6c757d;">🎫 Ticket 4 :</strong>  
+   Squelette &amp; Bob Martin (Dev)
+</div>
 
 **Objectif**  
 
@@ -145,10 +157,15 @@ cat /home/bob.martin/.bashrc | grep "alias ll='ls -alF'"
 
 ---
 
-## Incidents - Troubleshooting
+## 🚨 Incidents - Troubleshooting 🚨
 
 
-### <span style="color:red">Incident INC-01 — « Je suis dans le groupe mais je ne peux pas écrire - alice.dupont »</span>
+<div style="border-left: 4px solid #774ae2; background-color: #f4f0fa; padding: 10px 15px; margin: 20px 0; border-radius: 4px; font-family: 'Segoe UI', sans-serif; color: #333;">
+  <p style="margin: 0; font-size: 15px;">
+    <strong style="color: #774ae2;">Incident INC-01 :</strong> « Je suis dans le groupe mais je ne peux pas écrire. Alice.dupont »
+  </p>
+</div>
+
 
 **Ticket de alice.dupont :** « Je suis dans le groupe `marketing` mais je ne peux pas écrire »
 
@@ -190,7 +207,11 @@ rm -f /lab/depts/marketing/share/test
 
 ---
 
-### <span style="color:red"> Incident INC-02 — « Oups, j'ai supprimé par erreur le fichier d'un collègue - alice.dupont » </span>
+<div style="border-left: 4px solid #774ae2; background-color: #f4f0fa; padding: 10px 15px; margin: 20px 0; border-radius: 4px; font-family: 'Segoe UI', sans-serif; color: #333;">
+  <p style="margin: 0; font-size: 15px;">
+    <strong style="color: #774ae2;">Incident INC-02 :</strong> « Oups, j'ai supprimé par erreur le fichier d'un collègue. Alice.dupont »
+  </p>
+</div>
 
 Dans le répertoire `/lab/depts/marketing/share`, Alice a supprimer le fichier de bob sans faire attention. Heuresement Bob possédait le fichier dans son drive, cependant, ce genre
 d'incident ne doit plus se produire, trouvez une solution pour permettre aux utilsiateurs dugroupe marketing qui travaillent sur le dossier share de supprimer leurs propres fichiers
@@ -250,7 +271,11 @@ ls -ld /lab/depts/marketing/share
 
 ---
 
-### <span style="color:red"> Incident INC-03 — « Je n'arrive plus à changer mon mot de passe : Authentication token manipulation error - camel.chalal » </span>
+<div style="border-left: 4px solid #774ae2; background-color: #f4f0fa; padding: 10px 15px; margin: 20px 0; border-radius: 4px; font-family: 'Segoe UI', sans-serif; color: #333;">
+  <p style="margin: 0; font-size: 15px;">
+    <strong style="color: #774ae2;">Incident INC-03 : </strong> « Je n'arrive plus à changer mon mot de passe : Authentication token manipulation error. Camel.chalal »
+  </p>
+</div>
 
 **Symptômes :**
 - Suite à une manipulation hasardeuse de ma part `camel.chalal` je n'arrive plus à changer mon mot de passe, j'ai une erreur `passwd: Authentication token manipulation error`.
@@ -311,7 +336,11 @@ sudo -u camel.chalal passwd
 ```
 ---
 
-### <span style="color:red"> Incident INC-04 — « Je n'arrive pas à me connecter en ssh avec la nouvelle clé  - camel.chalal » </span>
+<div style="border-left: 4px solid #774ae2; background-color: #f4f0fa; padding: 10px 15px; margin: 20px 0; border-radius: 4px; font-family: 'Segoe UI', sans-serif; color: #333;">
+  <p style="margin: 0; font-size: 15px;">
+    <strong style="color: #774ae2;">Incident INC-04 :</strong> « Je n'arrive pas à me connecter en SSH avec la nouvelle clé. Camel.chalal »
+  </p>
+</div>
 
 **Symptômes :**
 Votre collaborateur `camel.chalal` n'arrive pas à se connecter avec sa clé privé, le serveur semble ignorer l'authentification par clé et bascule en authentification par mot de passe.

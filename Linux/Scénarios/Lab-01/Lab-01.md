@@ -74,7 +74,7 @@ vous pouvez restez avec le compte root. (chose à ne pas faire en production)
 Les incidents sont **déclenchés à la demande** via des commandes simples (voir plus bas).
 
 
-## 🏷️ Les tickets -  
+## 🎫 Les tickets -  
 
 *Règle d’or : réaliser les tickets dans l’ordre.*
 
@@ -155,9 +155,12 @@ L’ordre des opérations est important : le squelette doit être prêt avant to
 - stop-incident04
 
 
-<div style="border: 3px solid #774ae2ff; background-color: #f8f0ffff; padding: 15px; border-radius: 5px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-<h3 style="color: black; font-weight: bold;">Incident INC-01 : « Je suis dans le groupe mais je ne peux pas écrire - alice.dupont »</h3>
+<div style="border-left: 4px solid #774ae2; background-color: #f4f0fa; padding: 10px 15px; margin: 20px 0; border-radius: 4px; font-family: 'Segoe UI', sans-serif; color: #333;">
+  <p style="margin: 0; font-size: 15px;">
+    <strong style="color: #774ae2;">Incident INC-01 :</strong> « Je suis dans le groupe mais je ne peux pas écrire. Alice.dupont »
+  </p>
 </div>
+
 
 **Contexte** : - Alice (groupe `marketing`) essaye de créer un fichier dans `/lab/depts/marketing/share` mais obtient « *Permission denied* ».
 
@@ -168,8 +171,10 @@ L’ordre des opérations est important : le squelette doit être prêt avant to
 
 Vous devez résoudre ce ticket pour passer au suivant.
 
-<div style="border: 3px solid #774ae2ff; background-color: #f8f0ffff; padding: 15px; border-radius: 5px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-<h3 style="color: black; font-weight: bold;">Incident INC-02 — « Oups, j'ai supprimé par erreur le fichier d'un collègue - alice.dupont »</h3>
+<div style="border-left: 4px solid #774ae2; background-color: #f4f0fa; padding: 10px 15px; margin: 20px 0; border-radius: 4px; font-family: 'Segoe UI', sans-serif; color: #333;">
+  <p style="margin: 0; font-size: 15px;">
+    <strong style="color: #774ae2;">Incident INC-02 :</strong> « Oups, j'ai supprimé par erreur le fichier d'un collègue. Alice.dupont »
+  </p>
 </div>
 
 
@@ -188,8 +193,10 @@ Or, selon la politique interne, chaque membre du groupe `marketing` doit pouvoir
 **Attendu** : Seuls les propriétaires peuvent supprimer leur propres fichiers (le root aussi, et ce n'est pas un piège).
 
 
-<div style="border: 3px solid #774ae2ff; background-color: #f8f0ffff; padding: 15px; border-radius: 5px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-<h3 style="color: black; font-weight: bold;">Incident INC-03 — « Je n'arrive plus à changer mon mot de passe : Authentication token manipulation error - camel.chalal »</h3>
+<div style="border-left: 4px solid #774ae2; background-color: #f4f0fa; padding: 10px 15px; margin: 20px 0; border-radius: 4px; font-family: 'Segoe UI', sans-serif; color: #333;">
+  <p style="margin: 0; font-size: 15px;">
+    <strong style="color: #774ae2;">Incident INC-03 : </strong> « Je n'arrive plus à changer mon mot de passe : Authentication token manipulation error. Camel.chalal »
+  </p>
 </div>
 
 
@@ -212,8 +219,11 @@ Pistes à creuser : `/etc/passwd` `/etc/shadow`
 
 
 
-<div style="border: 3px solid #774ae2ff; background-color: #f8f0ffff; padding: 15px; border-radius: 5px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-<h3 style="color: black; font-weight: bold;">Incident INC-04 : « Je n'arrive pas à me connecter en ssh avec la nouvelle clé  - camel.chalal »</h3></div>
+<div style="border-left: 4px solid #774ae2; background-color: #f4f0fa; padding: 10px 15px; margin: 20px 0; border-radius: 4px; font-family: 'Segoe UI', sans-serif; color: #333;">
+  <p style="margin: 0; font-size: 15px;">
+    <strong style="color: #774ae2;">Incident INC-04 :</strong> « Je n'arrive pas à me connecter en SSH avec la nouvelle clé. Camel.chalal »
+  </p>
+</div>
   
 **Contexte** : 
 

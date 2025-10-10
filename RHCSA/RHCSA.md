@@ -1,6 +1,6 @@
 ---
 title: RHCSA
-nav_order: 40
+nav_order: 300
 has_children: true
 ---
 

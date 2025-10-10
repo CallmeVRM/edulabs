@@ -1,7 +1,7 @@
 ---
 title: Scénarios
-parent: LinuxLabs
-nav_order: 1
+parent: Linux
+nav_order: 30
 ---
 
 # Lab Linux — Scénario

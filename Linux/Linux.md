@@ -1,6 +1,6 @@
 ---
-title: LinuxSkills
-nav_order: 3
+title: Linux
+nav_order: 100
 has_children: true
 ---
 

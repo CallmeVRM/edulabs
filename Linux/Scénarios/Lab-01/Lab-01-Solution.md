@@ -147,10 +147,8 @@ cat /home/bob.martin/.bashrc | grep "alias ll='ls -alF'"
 
 ## Incidents - Troubleshooting
 
-{: .note } 
-Hello World 
 
-### <span style="color:red">Incident INC-01 — « Je suis dans le groupe mais je ne peux pas écrire - alice.dupont »</span> {: .fw-300 }
+### <span style="color:red">Incident INC-01 — « Je suis dans le groupe mais je ne peux pas écrire - alice.dupont »</span>
 
 **Ticket de alice.dupont :** « Je suis dans le groupe `marketing` mais je ne peux pas écrire »
 
@@ -194,7 +192,6 @@ rm -f /lab/depts/marketing/share/test
 
 ### <span style="color:red"> Incident INC-02 — « Oups, j'ai supprimé par erreur le fichier d'un collègue - alice.dupont » </span>
 
-
 Dans le répertoire `/lab/depts/marketing/share`, Alice a supprimer le fichier de bob sans faire attention. Heuresement Bob possédait le fichier dans son drive, cependant, ce genre
 d'incident ne doit plus se produire, trouvez une solution pour permettre aux utilsiateurs dugroupe marketing qui travaillent sur le dossier share de supprimer leurs propres fichiers
 mais pas ceux des autres. Tout en gardant les possibilité de lectures/ecritures/exécutions. 
@@ -216,9 +213,9 @@ Reproduire le problème :
 
 ```bash
 # Création d’un fichier de test dans le dossier "share"
-# → exécuté en tant qu’utilisateur thomas.dru
-# → le fichier appartiendra à thomas.dru et au groupe marketing
-sudo -u thomas.dru touch /lab/depts/marketing/share/coucouAlice
+# → exécuté en tant qu’utilisateur dhomas.tru
+# → le fichier appartiendra à dhomas.tru et au groupe marketing
+sudo -u dhomas.tru touch /lab/depts/marketing/share/coucouAlice
 
 # Tentative de suppression du fichier par un autre utilisateur (alice.dupont)
 # → si le sticky bit n’est PAS activé, la suppression sera possible
@@ -238,8 +235,8 @@ Aucun changement supplémentaire n’est nécessaire ; les droits rwx du groupe 
 **Vérification :**
 
 ```bash
-# Création d’un fichier de test dans le dossier "share" par thomas.dru
-sudo -u thomas.dru touch /lab/depts/marketing/share/coucouAlice
+# Création d’un fichier de test dans le dossier "share" par dhomas.tru
+sudo -u dhomas.tru touch /lab/depts/marketing/share/coucouAlice
 
 #Suppression du fichier par alice.dupont
 sudo -u alice.dupont rm -f /lab/depts/marketing/share/coucouAlice

@@ -191,9 +191,11 @@ Or, selon la politique interne, chaque membre du groupe `marketing` doit pouvoir
 
 Pistes à creuser : `/etc/passwd` `/etc/shadow`
 
-<h3 style="color: red; font-weight: bold;">Incident INC-04 — « Je n'arrive pas à me connecter en ssh avec la nouvelle clé  - camel.chalal »</h3>
 
 
+<div style="border: 3px solid #774ae2ff; background-color: #f8f0ffff; padding: 15px; border-radius: 5px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+<h3 style="color: black; font-weight: bold;">Incident INC-04 — « Je n'arrive pas à me connecter en ssh avec la nouvelle clé  - camel.chalal »</h3></div>
+  
 **Contexte** : 
 
 Le stagiaire sylvain.morel a ajouté une clé publique dans le fichier `~/.ssh/authorized_keys` du compte camel.chalal, afin de permettre une connexion SSH sans mot de passe. Pourtant, malgré cette configuration, le serveur continue de demander une authentification par mot de passe : la clé est ignorée.

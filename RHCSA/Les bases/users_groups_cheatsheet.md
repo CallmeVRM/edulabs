@@ -1,6 +1,6 @@
 ---
-title: users&groups cheatsheet
-nav_order: 1
+title: Cheatsheet - Users & Groups
+nav_order: 2
 parent: RHCSA
 has_children: true
 ---

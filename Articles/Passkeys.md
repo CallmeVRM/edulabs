@@ -1,8 +1,8 @@
 ---
-title: Passkeys 101 pour ingénieurs cloud : comprendre, adopter, sécuriser
+title: Les passkeys
 parent: Articles
 nav_order: 10
-has_children: true
+has_children: none
 nav_exclude: false
 ---
 

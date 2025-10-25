@@ -1,8 +1,8 @@
 ---
-title: Les passkeys
+title: Les Passkeys
 parent: Articles
-nav_order: 10
-has_children: none
+nav_order: 4
+has_children: true
 nav_exclude: false
 ---
 

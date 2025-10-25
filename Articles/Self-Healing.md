@@ -3,6 +3,7 @@ title: Concevoir des systèmes en mode Self Heal sur Azure
 parent: Articles
 nav_order: 2
 has_children: true
+exclude_from_nav: true
 ---
 
 # Concevoir des systèmes en mode Self Heal sur Azure

@@ -1,8 +1,9 @@
 ---
-title: LoadBalancer
+title: Load Balancer - P1
 parent: Réseau-Network
 grand_parent: Certification AZ-104
 nav_order: 15
+nav_exclude: true
 ---
 
 # DNS dans Azure : services et fonctionnalités

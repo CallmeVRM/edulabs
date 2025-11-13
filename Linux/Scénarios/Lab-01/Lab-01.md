@@ -20,7 +20,7 @@ nav_order: 1
 
 ## ⚙️ Lancement (VM ou Conteneur)
 
-### Option A — Image prête à l’emploi (VM)
+### Option A — Image prête à l’emploi (VM) [EN COURS DE DEV]
 
 1. Téléchargez l’image préconfigurée mise à disposition (Incus,Proxmox, VirtualBox, VMware Workstation, Hyper-V).
 2. Importez l’image dans votre hyperviseur et démarrez la machine virtuelle.
@@ -40,7 +40,7 @@ docker run -it --name lab-linux-sprint-01 \
 ```
 
 ### Option C — Browser Ready :
-Si vous souhaitez accéder aux labs directement depuis votre navigateur (pour une duée de 1h), sans avoir à rien déployer, vous pouvez en faire la demande à l’adresse suivante : edulabs.svc@gmail.com
+Browser Ready : Cette option sera disponible prochainement. 
 
 ---
 

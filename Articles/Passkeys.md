@@ -132,13 +132,13 @@ Ce couplage relie l’identité humaine forte (passkey) et l’identité machine
 
 - **Grand public :** cap sur la récupération (synced). Entreprise : priorité au contrôle et à la réduction de surface d’attaque (device-bound), souvent avec clés matérielles pour standardiser l’expérience.
 
-# Ce que change réellement l’approche passkeys/FIDO2
+### Ce que change réellement l’approche passkeys/FIDO2
 
 - **Anti-phishing par conception :** liaison stricte au domaine, preuve locale, proximité matérielle.
 - **Réduction des secrets réutilisables :** moins de mots de passe à renouveler, moins de resets et de politiques acrobatiques.
 - **Expérience sobre :** geste court (PIN/biométrie), souvent sans identifiant, y compris sur postes partagés via clés matérielles.
 - **Chaîne de confiance continue :** en l’adossant à un CA (step-ca), la preuve FIDO2 irrigue mTLS, SSH et pipelines d’admin.
 
-# Conclusion
+## Conclusion
 
 Parler de passkeys sans parler de FIDO2 reviendrait à ignorer ce qui les rend sûres. La passkey est l’expression UX d’un cadre normatif (FIDO2) qui impose origin binding, preuve locale, asymétrie et proximité. Les YubiKey donnent à cette promesse un support matériel portable et gouvernable. En reliant le tout à un CA comme step-ca, la confiance s’étend jusqu’aux certificats éphémères qui sécurisent services et accès. Le résultat n’est ni un tutoriel, ni une simple MFA revisitée : c’est une architecture d’authentification et de distribution de confiance, conçue pour résister aux attaques courantes et pour tenir la distance côté opérations.

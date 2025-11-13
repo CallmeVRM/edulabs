@@ -11,7 +11,7 @@ Je m’appelle Lotfi Hamadene et je suis à l’origine d’Edulabs, une initiat
 Edulabs est à la fois :
 
 - Un espace personnel où je documente mes tests de technologies, mes résolutions de bugs et mes trouvailles du quotidien.
-- Une plateforme d’apprentissage en construction, conçue pour mettre l’accent sur la pratique combiné à la théorie fondmentale.
+- Une plateforme d’apprentissage en construction, conçue pour mettre l’accent sur la pratique combiné à la théorie.
 
 ## Ma vision
 
@@ -23,7 +23,7 @@ Edulabs n’a pas vocation à être une énième plateforme théorique. Mon obje
 
 ## Ce que vous trouverez ici
 
-- Des retours d’expérience sur Linux, Azure, Kubernetes, Podman, Incus et d’autres technos Cloud & DevOps & DevSecOps.
+- Des retours d’expérience sur Linux, Azure, Kubernetes, Podman, Incus et d’autres technos.
 - Des solutions et astuces face aux problèmes rencontrés au quotidien.
 - Des scénarios de labs réalistes, pensés pour renforcer vos compétences et surtout votre confiance.
 
@@ -42,4 +42,4 @@ Avec Edulabs, je veux proposer autre chose :
 J’ai aussi remarqué que beaucoup de stagiaires et d’apprenants francophones (des professionnels aussi) que j’ai rencontrés étaient freinés par la *barrière de la langue anglaise*. Bien que je conseille toujours de se former en anglais au moins technique, cela reste une charge cognitive supplémentaire pour beaucoup, et peut ralentir la progression *(Attention ! Les machines des labs sont exclusivement en anglais, le support est en français avec des anglissimes)*
 
 
-👉 **Edulabs est là pour apporter une brique dans le monde de l'IT**
+👉 **Edulabs est là pour apporter une brique dans le monde de l'IT, elle ne réinvente pas la roue**

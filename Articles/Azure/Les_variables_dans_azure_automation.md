@@ -4,7 +4,7 @@ parent: Azure
 grand_parent: Articles
 nav_order: 11
 has_children: true
-
+exclude_from_nav: true
 ---
 
 # Les variables dans Azure Automation
@@ -90,3 +90,81 @@ C’est ce qui vous permet de garder vos secrets sécurisés tout en automatisan
 ### Modifier ou supprimer
 
 Besoin de mettre à jour la valeur ?
+```PowerShell
+Set-AzAutomationVariable `
+  -ResourceGroupName "Infra-Prod" `
+  -AutomationAccountName "OpsAccount" `
+  -Name "DefaultRegion" `
+  -Value "northeurope"
+```
+
+Et pour nettoyer un peu :
+
+```PowerShell
+Remove-AzAutomationVariable `
+  -ResourceGroupName "Infra-Prod" `
+  -AutomationAccountName "OpsAccount" `
+  -Name "DefaultRegion"
+```
+
+🧩 Quelques bonnes pratiques (issues du terrain)
+
+1. Nommez clairement.
+Un bon nom évite les erreurs. Exemples :
+config-StorageAccountName, secret-AdminPassword, global-Region.
+
+2. Chiffrez systématiquement les secrets.
+Même si vos runbooks sont privés, évitez de stocker des mots de passe en clair.
+
+3. Documentez.
+La description de la variable est là pour une raison. Notez ce qu’elle représente et où elle est utilisée.
+
+4. Évitez les objets trop complexes.
+Les variables aiment la simplicité. Pour un tableau ou un dictionnaire, passez plutôt un JSON.
+
+5. Centralisez vos paramètres.
+Les variables sont parfaites pour les constantes d’infrastructure : région, nom de ressource, image de VM, etc.
+
+6. Pensez à Key Vault.
+Pour les secrets vraiment sensibles, stockez-les dans Azure Key Vault et ne gardez dans vos variables que les identifiants nécessaires pour les récupérer.
+
+### Exemple concret
+
+Un petit scénario : vous avez un runbook qui déploie des VMs avec un mot de passe administrateur et une région définis dans vos variables.
+```PowerShell
+$region = Get-AutomationVariable -Name "DefaultRegion"
+$adminUser = Get-AutomationVariable -Name "AdminUser"
+$adminPassword = Get-AutomationVariable -Name "AdminPassword"
+
+New-AzVM `
+  -ResourceGroupName "RG-Lab" `
+  -Name "vm-lab01" `
+  -Location $region `
+  -Credential (New-Object PSCredential($adminUser, (ConvertTo-SecureString $adminPassword -AsPlainText -Force)))
+```
+
+Le jour où vous changez de région ou de mot de passe ?
+Vous modifiez la variable dans le portail, et tout continue de fonctionner sans toucher au script.
+C’est propre, et ça respire la sérénité.
+
+⚠️ Les petites limites à connaître
+
+Une fois chiffrée, la valeur ne peut plus être affichée ni décryptée manuellement.
+
+Le statut “chiffré/non chiffré” est définitif après création.
+
+Les objets PowerShell complexes peuvent avoir des comportements étranges : préférez le JSON.
+
+Les variables sont propres à chaque compte Automation : elles ne sont pas globales à l’abonnement.
+
+📚 Référence : Azure Automation – Shared Resources
+
+### 🎯 En résumé
+
+Les variables, c’est la mémoire de vos runbooks.
+Elles évitent les copier-coller, elles rendent vos automatisations plus souples, et elles gardent vos secrets là où ils doivent être : à l’abri.
+
+On pourrait presque dire que les runbooks sont le moteur…
+et les variables, le carburant.
+
+Bien dosées, elles font tourner votre automatisation avec une efficacité tranquille.

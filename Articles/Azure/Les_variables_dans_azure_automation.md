@@ -60,7 +60,7 @@ Une fois enregistrée, la variable devient immédiatement accessible depuis vos 
 ### En utilisant PowerShell
 
 Pour créer une variable sans chiffrement :
-```Powershell
+```bash
 New-AzAutomationVariable `
   -ResourceGroupName "edu-eastus" `
   -AutomationAccountName "AutomationLab001" `

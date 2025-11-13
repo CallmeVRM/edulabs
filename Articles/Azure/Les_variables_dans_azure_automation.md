@@ -138,7 +138,7 @@ Pour les secrets vraiment sensibles, stockez-les dans Azure Key Vault et ne gard
 
 Un petit scénario : vous avez un runbook qui déploie une VM avec un mot de passe administrateur et une région définis dans vos variables.
 
-```PowerShell
+```Powershell
 # --- Variables ---
 $region = Get-AutomationVariable -Name "DefaultRegion"
 $adminUser = Get-AutomationVariable -Name "AdminUser"

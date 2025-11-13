@@ -50,6 +50,10 @@ Petite subtilité : une fois la variable créée, vous ne pouvez plus changer so
 - Choisissez le nom, le type, la valeur, et s’il faut la chiffrer
 - Enregistrez.
 
+![alt text](./images/img-az-auto-var/image.png)
+
+![alt text](./images/img-az-auto-var/image-3.png)
+
 Et voilà. C’est tout.
 Une fois enregistrée, la variable devient immédiatement accessible depuis vos runbooks.
 
@@ -58,8 +62,8 @@ Une fois enregistrée, la variable devient immédiatement accessible depuis vos 
 Pour créer une variable sans chiffrement :
 ```Powershell
 New-AzAutomationVariable `
-  -ResourceGroupName "nextcloud-prod" `
-  -AutomationAccountName "OpsAccount" `
+  -ResourceGroupName "edu-eastus" `
+  -AutomationAccountName "AutomationLab001" `
   -Name "DefaultRegion" `
   -Value "eastus" `
   -Encrypted $false
@@ -68,19 +72,21 @@ New-AzAutomationVariable `
 Pour créer une variable avec chiffrement :
 ```Powershell
 New-AzAutomationVariable `
-  -ResourceGroupName "nextcloud-prod" `
-  -AutomationAccountName "OpsAccount" `
+  -ResourceGroupName "edu-eastus" `
+  -AutomationAccountName "AutomationLab001" `
   -Name "DefLinuxAdminPassword" `
   -Value "MotdepasseFort123!" `
   -Encrypted $true
 ```
+
+![alt text](./images/img-az-auto-var/image-4-varok.png)
 
 ### Lire une variable dans un runbook
 
 Dans un runbook PowerShell, la lecture est très simple :
 ```PowerShell
 $region = Get-AutomationVariable -Name "DefaultRegion"
-$password = Get-AutomationVariable -Name "AdminPassword"
+$password = Get-AutomationVariable -Name "DefLinuxAdminPassword"
 ``` 
 
 La belle particularité, c’est que même les variables chiffrées peuvent être lues à l’intérieur du runbook — puisque celui-ci s’exécute avec les permissions nécessaires.
@@ -92,8 +98,8 @@ C’est ce qui vous permet de garder vos secrets sécurisés tout en automatisan
 Besoin de mettre à jour la valeur ?
 ```PowerShell
 Set-AzAutomationVariable `
-  -ResourceGroupName "Infra-Prod" `
-  -AutomationAccountName "OpsAccount" `
+  -ResourceGroupName "edu-eastus" `
+  -AutomationAccountName "AutomationLab001" `
   -Name "DefaultRegion" `
   -Value "northeurope"
 ```
@@ -102,8 +108,8 @@ Et pour nettoyer un peu :
 
 ```PowerShell
 Remove-AzAutomationVariable `
-  -ResourceGroupName "Infra-Prod" `
-  -AutomationAccountName "OpsAccount" `
+  -ResourceGroupName "edu-eastus" `
+  -AutomationAccountName "AutomationLab001" `
   -Name "DefaultRegion"
 ```
 
@@ -130,18 +136,40 @@ Pour les secrets vraiment sensibles, stockez-les dans Azure Key Vault et ne gard
 
 ### Exemple concret
 
-Un petit scénario : vous avez un runbook qui déploie des VMs avec un mot de passe administrateur et une région définis dans vos variables.
+Un petit scénario : vous avez un runbook qui déploie une VM avec un mot de passe administrateur et une région définis dans vos variables.
+
 ```PowerShell
+# --- Variables ---
 $region = Get-AutomationVariable -Name "DefaultRegion"
 $adminUser = Get-AutomationVariable -Name "AdminUser"
-$adminPassword = Get-AutomationVariable -Name "AdminPassword"
+$adminPassword = Get-AutomationVariable -Name "DefLinuxAdminPassword"
+$rg = "edu-eastus"
+$vnetName = "spoke-prod-01"
+$subnetName = "front-prod"
 
-New-AzVM `
-  -ResourceGroupName "RG-Lab" `
-  -Name "vm-lab01" `
-  -Location $region `
-  -Credential (New-Object PSCredential($adminUser, (ConvertTo-SecureString $adminPassword -AsPlainText -Force)))
-```
+# --- Crédential ---
+$cred = New-Object PSCredential ($adminUser, (ConvertTo-SecureString $adminPassword -AsPlainText -Force))
+
+# --- Récupération du Subnet existant ---
+$vnet = Get-AzVirtualNetwork -Name $vnetName -ResourceGroupName $rg
+$subnet = Get-AzVirtualNetworkSubnetConfig -Name $subnetName -VirtualNetwork $vnet
+
+# --- Création de la carte réseau (NIC) ---
+$nic = New-AzNetworkInterface -Name "nic-lab01" `
+    -ResourceGroupName $rg `
+    -Location $region `
+    -SubnetId $subnet.Id
+
+# --- Configuration de la VM ---
+$vmConfig = New-AzVMConfig -VMName "vm-lab01" -VMSize "B1s" |
+    Set-AzVMOperatingSystem -Linux -ComputerName "vm-lab01" -Credential $cred |
+    Set-AzVMSourceImage -PublisherName "Canonical" -Offer "0001-com-ubuntu-server-jammy" -Sku "24_04-lts" -Version "latest" |
+    Add-AzVMNetworkInterface -Id $nic.Id
+
+# --- Création de la VM ---
+New-AzVM -ResourceGroupName $rg -Location $region -VM $vmConfig
+
+``` 
 
 Le jour où vous changez de région ou de mot de passe ?
 Vous modifiez la variable dans le portail, et tout continue de fonctionner sans toucher au script.
@@ -149,22 +177,14 @@ C’est propre, et ça respire la sérénité.
 
 ⚠️ Les petites limites à connaître
 
-Une fois chiffrée, la valeur ne peut plus être affichée ni décryptée manuellement.
-
-Le statut “chiffré/non chiffré” est définitif après création.
-
-Les objets PowerShell complexes peuvent avoir des comportements étranges : préférez le JSON.
-
-Les variables sont propres à chaque compte Automation : elles ne sont pas globales à l’abonnement.
-
-📚 Référence : Azure Automation – Shared Resources
+- Une fois chiffrée, la valeur ne peut plus être affichée ni décryptée manuellement.
+- Le statut “chiffré/non chiffré” est définitif après création.
+- Les objets PowerShell complexes peuvent avoir des comportements étranges : préférez le JSON.
+- Les variables sont propres à chaque compte Automation : elles ne sont pas globales à l’abonnement.
 
 ### 🎯 En résumé
 
 Les variables, c’est la mémoire de vos runbooks.
-Elles évitent les copier-coller, elles rendent vos automatisations plus souples, et elles gardent vos secrets là où ils doivent être : à l’abri.
+Elles évitent les copier-coller, elles rendent vos automatisations plus souples, et elles gardent vos secrets là où ils doivent être : à l’abri si vous n'avez pas de Azure Vault.
 
-On pourrait presque dire que les runbooks sont le moteur…
-et les variables, le carburant.
-
-Bien dosées, elles font tourner votre automatisation avec une efficacité tranquille.
+📚 Références Microsoft : Azure Automation – Shared Resources

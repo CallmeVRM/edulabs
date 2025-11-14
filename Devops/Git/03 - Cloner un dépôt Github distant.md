@@ -3,7 +3,7 @@ title: 03 - Cloner un dépôt Github distant
 parent: Git
 grand_parent: Devops
 nav_order: 3
-nav_exclude: true
+nav_exclude: false
 ---
 
 # 03 - Cloner un dépôt GitHub distant et préparer un dépôt partagé local

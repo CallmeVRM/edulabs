@@ -16,8 +16,28 @@ Dans cette section, nous allons apprendre à cloner un dépôt GitHub distant su
 Commençons par créer une répertoire destiné à accueillir le clonage du dépôt GitHub.
 
 ```bash
-mkdir ~/projets
-cd ~/projets
+mkdir ~/projetA
+cd ~/projetA
 ```
 
 ### Cloner le dépôt distant
+Le dépôt distant que nous allons cloner est hébergé sur GitHub. Pour cloner un dépôt, nous avons besoin de son URL. Vous pouvez trouver cette URL sur la page du dépôt GitHub, généralement sous un bouton "Code" ou "Clone".
+
+![alt text](./images/url_github.png)
+
+Utilisez la commande `git clone` suivie de l'URL du dépôt pour cloner le dépôt sur votre machine locale.
+
+```bash
+git clone https://github.com/nom-utilisateur/nom-depot.git
+```
+Remplacez `nom-utilisateur` et `nom-depot` par les informations appropriées du dépôt que vous souhaitez cloner.
+
+L'utilisation du `.` à la fin de la commande est essentiel dans notre cas, car il indique à Git de cloner le dépôt dans le répertoire courant (`~/projets`), plutôt que de créer un nouveau sous-répertoire pour le dépôt.
+
+### Vérifier le clonage
+Une fois le clonage terminé, vous pouvez vérifier que le dépôt a été cloné correctement en listant le contenu du répertoire :
+
+```bash
+ls
+```
+

@@ -1,0 +1,94 @@
+---
+title: Créer un dépôt (Locale)
+parent: Devops
+nav_order: 2
+---
+
+# Créer un Dépôt Git Local et Ajouter des Fichiers
+Dans cette section nous allons mettre en place un dépôt Git local et y ajouter des fichiers.
+
+### Création du répertoire du dépôt
+Disons que vous travailler sur un projet appelé web-app. 
+Depuis le répertoire personnel de l'utilisateur, créez un nouveau répertoire pour le projet et accédez-y :
+
+```bash
+mkdir ~/web-app
+cd ~/web-app
+```
+
+### Initialisation du dépôt Git
+Pour initialiser un dépôt Git dans le répertoire courant, utilisez la commande suivante :
+
+```bash
+git init
+```
+Cette commande crée un sous-répertoire `.git` qui contient tous les fichiers nécessaires au dépôt Git.
+
+On peut vérifier que le dépôt a été initialisé en listant les fichiers cachés :
+
+```bash
+ls -a
+```
+La présence du dossier `.git` confirme que le dépôt a été créé avec succès.
+
+### Ajout de fichiers au dépôt
+Une des manière classique d'initialiser un dépôt est d'y ajouter des fichiers. Créons un fichier README.md pour notre projet :
+
+```bash
+echo "# Web App Project" > README.md
+```
+Le fichier est maintenant présent dans le répertoire.
+
+
+### Ajouter et valider le fichier README.md  dans Git
+Maintenant que `README.md` a été créé, nous allons l'ajouter à l'index (la zone de staging) puis valider les modifications avec un commit.
+
+Avant d'ajouter le fichier, vous pouvez vérifier son statut avec la commande pour comprendre au mieu le principe de suivi des fichiers par Git :
+
+```bash
+git status
+```
+Vous remarquez que le fichier qu'on vient de créer (`README.md`) est listé en mode `untracked` et n'est donc pas encore suivi par Git.
+
+Pour ajouter le fichier à l'index à fin qu'il soit suivi, utilisez la commande `git add` : 
+
+```bash
+git add README.md
+```
+
+Revérifiez avec `git status` :
+
+```bash
+git status
+```
+
+Il passe en mode staged, prêt à être validé.
+
+*Arrivé à cette étape, on peut soit procéder à la validation avec un commit, soit le unstage.*
+
+Pour valider les modifications et créer un commit, utilisez la commande suivante :
+
+```bash
+git commit -m "Initial commit: Ajout du fichier README.md"
+```
+Cette commande crée un commit avec le message spécifié.
+
+Une fois ces opérations réalisées, vérifions l’état du dépôt :
+```bash
+git status
+```
+
+L’affichage attendu devrait être similaire à :
+```bash
+# On branch master
+nothing to commit, working directory clean
+```
+Ce message indique que toutes les modifications ont été enregistrées et qu’il n’y a plus aucun fichier en attente.
+
+### Conclusion
+
+Le dépôt Git local est maintenant opérationnel.
+Il contient un fichier README.md correctement ajouté et committé. La configuration étant complète, le serveur peut être remis en toute confiance à l’équipe de développement.
+
+
+***Même si le dépôt Git reste exclusivement local, plusieurs utilisateurs peuvent tout à fait travailler dessus en parallèle. Il suffit qu’ils aient accès au même répertoire sur le serveur. Git gère naturellement ces situations : chaque utilisateur peut ajouter, modifier ou committer des fichiers depuis la même arborescence. L’organisation reste cependant importante : pour éviter les conflits, il est recommandé d’utiliser des branches séparées ou de coordonner les modifications, exactement comme sur un dépôt distant, mais en restant entièrement dans l’environnement local du serveur.***

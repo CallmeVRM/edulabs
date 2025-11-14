@@ -3,9 +3,55 @@ title: 03 - Cloner un dépôt Github distant
 parent: Git
 grand_parent: Devops
 nav_order: 3
+nav_exclude: true
 ---
 
 # 03 - Cloner un dépôt GitHub distant et préparer un dépôt partagé local
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Dans ce guide, nous allons mettre en place un workflow collaboratif local avec Git, en utilisant un dépôt distant hébergé sur GitHub comme source initiale.:
 

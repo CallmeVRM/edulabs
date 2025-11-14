@@ -34,9 +34,7 @@ nav_order: 1
 docker pull docker.io/edulabsfr/edulabs-lab01:1.0
 docker run -it --name lab-linux-sprint-01 \
   --hostname sprint01 \
-  docker.io/library/debian:12 \
-  bash
-
+  docker.io/edulabsfr/edulabs-lab01:1.0
 ```
 
 ### Option C — Browser Ready :

@@ -1,0 +1,54 @@
+---
+title: Git - Installation et Configuration Locale
+parent: Devops
+nav_order: 1
+---
+
+# Installer Git et le Configurer pour une Utilisation Locale
+Dans ce guide, nous allons voir comment installer Git sur votre machine locale et le configurer pour une utilisation de base mais efficace.
+
+Git est l'outil de gestion de versions le plus utilisé aujourd'hui, même si dans la plupart des cas, il est utilisé via des plateformes comme Github, ou Gitlab, il est important de savoir l'installer et le configurer localement.
+
+### Installation du package Git
+La première étape consiste à installer Git. Selon votre système d'exploitation, les commandes peuvent varier.
+
+```bash
+sudo dnf install git -y      # Pour les distributions basées sur Fedora
+sudo apt-get install git -y   # Pour les distributions basées sur Debian/Ubuntu
+```
+Git peut être présent sur le sytème, mais relancer la commande ne pose aucun problème.
+
+### Configurer Git au niveau global 
+Une fois Git installé, il est important de le configurer avec vos informations utilisateur. Cela permet d'associer vos commits à votre identité.
+
+Git stock ces paramètres dans un fichier appelé ~/.gitconfig. 
+
+Définissons maintenant : 
+- Le nom d'utilisateur
+- L'adresse e-mail
+- L'éditeur de texte par défaut
+
+```bash
+git config --global user.name "Votre Nom"
+git config --global user.email "votre.email@example.com"
+git config --global core.editor "/usr/bin/nano"
+```
+J'ai choisi nano comme éditeur de texte, mais vous pouvez choisir celui que vous préférez (vim, vi, .etc).
+
+### Vérifier la configuration
+Git offre deux méthodes pour consulter les paramètres de configuration globaux.
+
+**1. Afficher la liste des paramètres** :
+```bash
+git config --list
+```
+
+**2. Lire directement le fichier `.gitconfig`** :
+```bash
+cat ~/.gitconfig
+```
+Cette méthode vous permet de voir exatement la structure du fichier généré.
+
+### Conclusion
+Vous avez maintenant installé Git et configuré les paramètres de base pour une utilisation locale. Vous êtes prêt à commencer à utiliser Git pour gérer vos projets de développement. N'oubliez pas que Git offre de nombreuses autres options de configuration que vous pouvez explorer au fur et à mesure.
+

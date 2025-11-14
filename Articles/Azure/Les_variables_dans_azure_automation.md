@@ -4,7 +4,7 @@ parent: Azure
 grand_parent: Articles
 nav_order: 11
 has_children: true
-exclude_from_nav: true
+nav_exclude: true
 ---
 
 # Les variables dans Azure Automation

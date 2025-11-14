@@ -5,90 +5,253 @@ grand_parent: Devops
 nav_order: 3
 ---
 
-Dans ce guide, nous allons travailler en mode collaboratir, c'est à dire un admin récupérera un dépôt distant depuis Github, pour le mettre à disposition de toute une équipe de développeurs sur un répertoire partagé en local, les développeurs travailleront ensuite sur leur propre clone local, et commit leurs modifications vers le dépôt partagé.
+# 03 - Cloner un dépôt GitHub distant et préparer un dépôt partagé local
 
-# Cloner un Dépôt GitHub Distant et Créer un Clone Local
+Dans ce guide, nous allons mettre en place un workflow collaboratif local avec Git, en utilisant un dépôt distant hébergé sur GitHub comme source initiale.:
 
-Le clonage d'un dépôt permet de créer une copie locale complète du dépôt distant, y compris tout son historique de versions.
+- **Un administrateur** récupère un dépôt GitHub et crée un dépôt central partagé sur un répertoire commun.
 
-### Préparer l'emplacement local du dépôt
+- **Les développeurs** clonent ce dépôt central vers leurs répertoires personnels et poussent leurs modifications vers ce dépôt partagé.
 
-*Dans un environnement partagé, assurez-vous de mettre en place les permissions nécessaires pour que les autres collaborateurs puissent accéder au dépôt cloné, tout en ayant une stratégie du moindre privilège, qui consite à ne donner que les droits nécessaires aux personnes concernés.*
+Pour que cette collaboration fonctionne, il est indispensable d’utiliser un dépôt Git bare du côté serveur, afin que Git accepte les push sans risque d’incohérence.
 
-Commençons par créer une répertoire destiné à accueillir le clonage du dépôt GitHub.
-
-```bash
-mkdir -p /mnt/projets/proj_a
-cd /mnt/projets/proj_a
-```
-
-Dans mon cas j'ai un groupe se le nom `dev_proj_a` qui regroupe tous les developpeurs travaillant sur le projet A, je vais donc changer le owner du dossier et mettre le groupe `dev_proj_a` comme nouveau owner.
+## Coté Administrateur :
+### Création du dépôt central
+Nous allons créer un espace partagé dans /mnt/projets destiné à accueillir le dépôt central du projet. Le dépôt partagé utilisé comme point central doit être un dépôt bare, c’est-à-dire un dépôt Git sans working directory.
 
 ```bash
-chown -R :dev_proj_a /mnt/projets/proj_a
-chmod -R 770 /mnt/projets/proj_a
+git init --bare /mnt/projets/proj_a.git
 ```
 
-J'ajoute le bit `setgid` pour que tous les nouveaux fichiers et répertoires créés dans ce répertoire héritent du groupe parent.
+Dans cet exemple, tous les développeurs du projet A appartiennent au groupe Unix dev_proj_a.
+Nous ajustons donc les permissions pour garantir :
+
+- un accès restreint
+- une collaboration fluide
+- une gestion cohérente des permissions grâce au bit setgid
+
+Mise en place des permissions :
+```bash
+chown -R root:dev_proj_a /mnt/projets/proj_a.git
+chmod -R 2770 /mnt/projets/proj_a.git
+```
+Le dépôt central est maintenant prêt à recevoir des pushes.
+
+### Importer un projet GitHub dans le dépôt central
+L’administrateur récupère le dépôt GitHub dans sa zone personnelle :
+
+git clone https://github.com/nom-utilisateur/nom-depot.git
+cd nom-depot
+
+À ce stade, vous êtes dans votre copie locale du projet GitHub :
 
 ```bash
-chmod g+s /mnt/projets/proj_a
+/home/admin/nom-depot
 ```
 
-Tout nouveau fichier ou répertoire créé dans `/mnt/projets/proj_a` appartiendra automatiquement au groupe `dev_proj_a`.
+Dans ce répertoire, Git conserve :
 
-J'ajoute le sticky bit pour que les utilisateurs ne puissent supprimer que leurs propres fichiers.
+- votre espace de travail (fichiers visibles)
+- le dossier .git/ contenant l’historique
+- les branches
+- les commits locaux
+
+Ce clone va être utilisé pour pousser son contenu dans le dépôt central.
+
+Or dans cette configuration, vous êtes désormais dans le répertoire local du projet github, cette copie pour l'instant n'est pas encore liée au dépôt partagé localement, elle est connectée uniquement au dépôt distant github. Et vous pouvez vérifier cela avec la commande:
 
 ```bash
-chmod +t /mnt/projets/proj_a
+git remote -v
+```
+Vous voyez que l'URL du dépôt distant github est bien référencée.
+
+```bash
+origin  https://github.com/nom-utilisateur/nom-depot.git (fetch)
+origin  https://github.com/nom-utilisateur/nom-depot.git (push)
 ```
 
-Ainsi, les membres du groupe `dev_proj_a` peuvent créer et modifier des fichiers dans ce répertoire, mais ne peuvent pas supprimer les fichiers des autres membres.
+Si vous modifiez un fichier et que vous faites un `push` maintenant, vous pousserez vos modifications directement sur github.
 
-### Cloner le dépôt distant vers le répertoire partagé en local
-Le dépôt distant que nous allons cloner est hébergé sur GitHub. Pour cloner un dépôt, nous avons besoin de son URL. Vous pouvez trouver cette URL sur la page du dépôt GitHub, généralement sous un bouton "Code" ou "Clone".
+Or, nous voulons pousser non pas vers GitHub, mais vers notre dépôt local /mnt/projets/proj_a.git.
 
-![alt text](./images/url_github.png)
+On remplace l’origine GitHub par l’origine locale :
+```bash
+git remote remove origin
+git remote add origin /mnt/projets/proj_a.git
+```
+Puis on pousse le code vers le dépôt bare (ma branche principale s'appelle main dans cet exemple) :
+Vous pouvez vérifier le nom de votre branche principale avec la commande `git branch` avant de faire le push.
 
-Utilisez la commande `git clone` suivie de l'URL du dépôt pour cloner le dépôt sur votre machine locale.
+```bash
+git push -u origin main
+```
+Le dépôt central contient maintenant l’intégralité du projet.
+
+
+
+### (Optionnel) Créer un working directory partagé
+Si vous souhaitez disposer d’une copie lisible par tous (pour un outil interne, un serveur web ou une revue), vous pouvez générer un working directory séparé :
+```bash
+git clone /mnt/projets/proj_a.git /home/admin/proj_a
+```
+Permissions :
+```bash
+chown -R root:dev_proj_a /mnt/projets/proj_a
+chmod -R 2770 /mnt/projets/proj_a
+```
+Ce répertoire n'est pas un dépôt à utiliser pour travailler, mais une copie consultable.
+
+## Coté Developpeur :
+### Cloner le dépôt partagé en local vers son clone local
+Chaque développeur doit travailler dans sa propre copie locale du dépôt.
+
+Le développeur commence donc par créer un répertoire dédié dans le $HOME :
+
+```bash
+mkdir ~/proj_a
+cd ~/proj_a
+```
+Ensuite, on déclare le dépôt partagé comme “safe directory” uniquement pour éviter les avertissements de sécurité Git :
+```bash
+git config --global --add safe.directory /mnt/projets/proj_a.git/
+```
+Puis on clone le dépôt bare :
+```bash
+git clone /mnt/projets/proj_a .
+```
+Le `.` signifie que Git place le clone directement dans le répertoire courant.
+
+À ce stade, le développeur peut modifier les fichiers du projet, par exemple :
+```bash
+nano README.md
+```
+Puis il enregistrez les modifications :
+```bash
+git add .
+git commit -m "Premier commit local"
+git push origin master
+```
+
+Chaque développeur travaille dans son propre espace local, en toute autonomie. Lorsqu’il pousse ses modifications, Git les enregistre dans le dépôt central — le dépôt bare.
+À ce stade, les changements sont bien présents dans le dépôt partagé… mais uniquement dans sa base de données Git interne.
+
+Un dépôt bare n’a pas de copie directe des fichiers du projet :
+il stocke les commits, les arbres, les blobs, mais pas de working directory.
+Autrement dit, le dépôt central connaît parfaitement les nouvelles versions, mais il ne possède aucun fichier lisible comme README.md ou src/….
+
+Pour rendre ces modifications visibles dans une copie de travail lisible par un humain (le working directory du dépôt partagé), il faut qu’un utilisateur — généralement l’administrateur, ou le propriétaire du clone de travail partagé — exécute :
+
+```bash
+git pull
+```
+
+Ce git pull ne contacte pas GitHub il agit localement :
+
+- il récupère simplement les mises à jour depuis le dépôt bare et met à jour les fichiers du répertoire /home/<Admin>/proj_a. Le répertoire de travail ou l'administrateur a cloné le dépôt depuis github.
+Ainsi, les fichiers du dépôt partagé reflètent fidèlement les derniers commits envoyés par les développeurs.
+
+Git sépare donc clairement :
+
+- le stockage interne des versions (dans le dépôt bare),
+- et la mise à jour visible des fichiers (dans le working tree, via git pull).
+
+Cette mécanique permet de travailler à plusieurs en conservant un dépôt central propre, fiable et adapté à la collaboration locale.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Créer un dépôt Git central (bare)
+
+Créons donc le dépôt central en mode bare dans le répertoire partagé.
+
+```bash
+git init --bare /mnt/projets/proj_a.git
+```
+
+On ajuste ses permissions :
+```bash
+chown -R root:dev_proj_a /mnt/projets/proj_a.git
+chmod -R 2770 /mnt/projets/proj_a.git
+```
+
+Ce dépôt .git est désormais le remote officiel utilisé par toute l’équipe.
+
+### Importer le dépôt GitHub dans le dépôt central
+
+**Cloner le dépôt GitHub**
+
+depuis un compte administrateur, clonons le dépôt GitHub distant sur la machine locale au niveau de son home (par exemple).
 
 ```bash
 git clone https://github.com/nom-utilisateur/nom-depot.git
 ```
-Remplacez `nom-utilisateur` et `nom-depot` par les informations appropriées du dépôt que vous souhaitez cloner.
 
-L'utilisation du `.` à la fin de la commande est essentiel dans notre cas, car il indique à Git de cloner le dépôt dans le répertoire courant (`~/projets`), plutôt que de créer un nouveau sous-répertoire pour le dépôt.
+Git télécharge alors :
 
-### Vérifier le clonage
-Une fois le clonage terminé, vous pouvez vérifier que le dépôt a été cloné correctement en listant le contenu du répertoire :
+- tous les fichiers du projet
+- toutes les versions précédentes
+- tout l’historique complet du dépôt
 
-```bash
-ls -la
-```
+et crée automatiquement un nouveau dossier du même nom que le dépôt GitHub. Si le projet s’appelle `nom-depot`, un dossier du nom `nom-depot` est créé.
 
-On se retrouve avec un truc dans le genre:
-
-```plaintext
-total 20
-drwxrws--T. 4 root dev_proj_a  115 Nov 14 04:46 .
-drwxr-xr-x. 3 root root         20 Nov 14 04:44 ..
--rw-r--r--. 1 root dev_proj_a   73 Nov 14 04:46 CHANGELOG.md
-drwxr-sr-x. 8 root dev_proj_a  163 Nov 14 04:46 .git
--rw-r--r--. 1 root dev_proj_a   11 Nov 14 04:46 .gitignore
--rw-r--r--. 1 root dev_proj_a   26 Nov 14 04:46 LICENSE
--rw-r--r--. 1 root dev_proj_a  297 Nov 14 04:46 Makefile
--rw-r--r--. 1 root dev_proj_a 1110 Nov 14 04:46 README.md
-drwxr-sr-x. 2 root dev_proj_a   26 Nov 14 04:46 src
-```
-
-### Coté développeur : Cloner le dépôt partagé en local vers son clone local
-Chaque développeur peut maintenant cloner le dépôt partagé en local vers son propre répertoire de travail.
-
-mkdir ~/proj_a
-cd ~/proj_a
-
+**Entrer dans le dossier cloné**
 
 ```bash
-git clone --local /mnt/projets/proj_a .
+cd nom-depot
 ```
 
+
+Nous retirons donc l’origine GitHub :
+```bash
+git remote remove origin
+```
+
+Puis nous ajoutons le dépôt central local comme nouvelle origine :
+```bash
+git remote add origin /mnt/projets/proj_a.git
+```
+
+**Pousser le code vers le dépôt central**
+Envoyez maintenant tout le contenu du dépôt (branches, commits…) vers le dépôt bare :
+```bash
+git push -u origin master
+```
+
+Le dépôt partagé /mnt/projets/proj_a.git contient désormais tout le projet GitHub, mais dans une version adaptée au travail collaboratif interne.
+
+À partir de là, le dépôt partagé devient l’unique “source de vérité” pour l’équipe locale.
+
+
+
+
+
+
+
+
+
+Edit le fichier README.md ensuite git add . et git commit -m "Premier commit local" puis git push origin master pour pousser les modifications vers le dépôt partagé.
+
+tout les changement sont maintenant pris en compte par git.
+
+cependant jusqu'à présent, seul l'administrateur peut intervenir pour pousser des modifications vers le dépôt partagé.
+
+## Coté Administrateur :
+
+git pull
+
+maitnenant tout

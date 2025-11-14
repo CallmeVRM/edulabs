@@ -1,6 +1,7 @@
 ---
 title: Les Passkeys
-parent: Articles
+parent: Divers
+grand_parent: Articles
 nav_order: 4
 has_children: true
 nav_exclude: false

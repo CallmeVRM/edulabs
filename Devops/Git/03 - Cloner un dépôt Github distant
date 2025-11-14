@@ -1,0 +1,23 @@
+---
+title: 03 - Cloner un dépôt Github distant
+parent: Git
+grand_parent: Devops
+nav_order: 3
+---
+
+# Cloner un Dépôt GitHub Distant et Créer un Clone Local
+
+Dans cette section, nous allons apprendre à cloner un dépôt GitHub distant sur notre machine locale en utilisant Git. Le clonage d'un dépôt permet de créer une copie locale complète du dépôt distant, y compris tout son historique de versions.
+
+### Préparer l'emplacement local du dépôt
+
+*Dans un environnement partagé, assurez-vous de mettre en place les permissions nécessaires pour que les autres collaborateurs puissent accéder au dépôt cloné, tout en ayant une stratégie du moindre privilège, qui consite à ne donner que les droits nécessaires aux personnes concernés.*
+
+Commençons par créer une répertoire destiné à accueillir le clonage du dépôt GitHub.
+
+```bash
+mkdir ~/projets
+cd ~/projets
+```
+
+### Cloner le dépôt distant

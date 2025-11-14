@@ -1,8 +1,8 @@
 ---
-title: Créer un dépôt (Locale)
+title: 02 - Créer un dépot (Locale)
 parent: Git
 grand_parent: Devops
-nav_order: 3
+nav_order: 2
 ---
 
 # Créer un Dépôt Git Local et Ajouter des Fichiers

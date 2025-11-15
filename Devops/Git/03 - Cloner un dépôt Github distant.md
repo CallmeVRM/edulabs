@@ -8,14 +8,7 @@ nav_exclude: false
 
 # 03 - Cloner un dépôt GitHub distant et préparer un dépôt partagé local
 
-- Préparer /srv/projets/
-- Récupérer le code depuis GitHub une seule fois (repo “source”)
-- Créer le dépôt central bare dans /srv/projets/
-- Y pousser tout l’historique
-- Créer ton repo de travail depuis ce dépôt central
-- (Optionnel) Préparer la future connexion GitHub en SSH
-
-Dans ce guide, nous allons mettre en place un workflow collaboratif local avec Git, en utilisant un dépôt distant hébergé sur GitHub comme source initiale.:
+Dans ce guide, nous allons mettre en place un workflow collaboratif local avec Git, en utilisant un dépôt distant hébergé sur GitHub comme source initiale.
 
 - **Un administrateur** récupère un dépôt GitHub et crée un dépôt central partagé sur un répertoire commun.
 

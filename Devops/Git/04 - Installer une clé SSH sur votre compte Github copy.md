@@ -3,7 +3,7 @@ title: 03 - Cloner un dépôt Github distant
 parent: Git
 grand_parent: Devops
 nav_order: 4
-nav_exclude: true
+nav_exclude: false
 ---
 
 # 04 - Sécuriser l’Accès à GitHub avec une Clé SSH

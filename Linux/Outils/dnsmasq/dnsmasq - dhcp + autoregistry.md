@@ -25,7 +25,11 @@ le tout limité à une seule interface réseau, par exemple un bridge Proxmox d�
 
 ### Installation
 Sur une distribution basée sur Debian ou Ubuntu, l’installation est directe :
-Pour ma part, j’ai un conteneur LXC dédié à dnsmasq dans Proxmox.
+Pour ma part, j’ai un conteneur LXC dédié à dnsmasq dans Proxmox, avec deux interfaces réseaux : une vers le Bridge vmbr10 (LAN avec accès internet) et une vers vmbr20 (réseau isolé des VMs), et sur ce dernier que dnsmasq écoutera et distribuera les IP.
+
+J'ai déclaré le DNS suivant `px.edulabs.local` pour mon réseau local, et l'IP 192.168.20.200comme DNS upstream.
+
+Toutes les commandes ont été exécutées avec un compte ayant les privilèges root (sudo).
 
 ```bash
 sudo apt update
@@ -35,7 +39,7 @@ sudo apt install dnsmasq
 Si vous utilisez une distribution avec systemd-resolved, vérifiez qu’il ne monopolise pas le port 53 afin de ne pas interférer avec dnsmasq. Vous pouvez le faire en éditant `/etc/systemd/resolved.conf` et en mettant `DNSStubListener=no`, puis redémarrez systemd-resolved :
 
 ```bash
-sudo systemctl restart systemd-resolved
+systemctl restart systemd-resolved
 ```
 
 ### Préparer une configuration propre
@@ -54,7 +58,7 @@ mkdir -p /etc/dnsmasq-hosts
 ### Fichier `/etc/dnsmasq.conf` complet pour DHCP + DNS avec auto-enregistrement
 
 ```bash
-sudo nano /etc/dnsmasq.conf
+nano /etc/dnsmasq.conf
 ```
 
 Et j'ai mis en place configuration suivante :
@@ -135,7 +139,7 @@ log-dhcp
 Je place mes enregistrements non-DHCP dans un fichier séparé :
 
 ```bash
-sudo nano /etc/dnsmasq-hosts/local-hosts
+nano /etc/dnsmasq-hosts/local-hosts
 ```
 
 voici son contenu, que pouvez adapter selon vos besoins :
@@ -172,6 +176,12 @@ Je redémarre le service dnsmasq :
 sudo systemctl restart dnsmasq
 ```
 
+Je vérifie que mon service est bien actif, et ne présente pas d’erreurs :
+
+```bash
+sudo systemctl status dnsmasq
+```
+
 Je conseille également d’activer le service au démarrage :
 
 ```bash
@@ -180,11 +190,14 @@ sudo systemctl enable dnsmasq
 
 ### Tests dans un environnement Proxmox
 
-J’ai ensuite créé un conteneur Debian sous Proxmox (LXC) nommé admin1, connecté au bridge vmbr20 avec une MAC fixe correspondant à ma réservation :
+J’ai ensuite créé un conteneur Debian sous Proxmox (LXC) nommé admin1, connecté au bridge vmbr20 avec une MAC fixe correspondant à ma réservation, et une configuration réseau en DHCP:
 
 ```bash
 AA:AA:AA:AA:AA:03
 ```
+
+Pour le DNS j'ai mis mon domaine `px.edulabs.local` et l'IP de dnsmasq `192.168.20.200`.
+
 
 Au démarrage du conteneur :
 
@@ -194,13 +207,45 @@ Au démarrage du conteneur :
 - la résolution inverse (PTR) fonctionne également côté dnsmasq,
 - l’accès à des domaines publics fonctionne (dnsmasq transfère correctement aux upstream DNS).
 
+![alt text](./images/admin1ipa.png "admin1 - IP attribuée via DHCP + réservation MAC")
 
-Pour pousser le test plus loin, j'ai créer une autre VM sans réservation MAC, qui a obtenu une IP dynamique dans la plage 100-200, ainsi que la configuration réseau (gateway, DNS) correcte via DHCP.
+***Pour pousser le test plus loin, j'ai créer une autre VM sans réservation MAC, qui a obtenu une IP dynamique dans la plage 100-200, ainsi que la configuration réseau (gateway, DNS) correcte via DHCP.***
 
-Lors de la modification du hostname de cette VM, dnsmasq a automatiquement créé l’enregistrement DNS correspondant, après le redémarrage de la VM, sans touché à `dnsmasq`.
+Ayant utilisé un clone, le hostname par défaut est debian13, j'ai fais le test avec pour vérifier la prise en charge du changement de hostname et l'auto-enregistrement DNS.
+
+![alt text](./images/vmnextcloudipa.png "IP attribuée via DHCP dynamique")
+
+En remière étape , j'ai vérifié que la résolution DNS fonctionnait bien avec le hostname initial, étape donnée que la machine est lancé avec le hostname `debian13`, alors dnsmasq a automatiquement créé l'enregistrement DNS `debian13.px.edulabs.local` pointant vers l'IP dynamique attribuée.
+
+Depuis le conteneur admin1, j'ai pu faire un ping sur la machine `debian13.px.edulabs.local` :
+```bash
+ping -c 3 debian13.px.edulabs.local
+```
+
+![alt text](./images/adminpingdeb13.png "Ping debian13.px.edulabs.local depuis admin1")
+
+Ensuite, j'ai modifié le hostname de la VM debian13 en `nextcloud` et redémarré la VM :
+
+```bash
+hostnamectl set-hostname nextcloud && reboot now
+```
+
+La prise en compte du nouveau hostname a été vérifiée via un ping depuis admin1 :
+
+```bash
+ping -c 3 nextcloud.px.edulabs.local
+```
+
+![alt text](./images/vmhostnamechange.png "Changement de hostname de debian13 à nextcloud")
+
+Comme vous pouvez le constater dans la capture ci-dessus, le ping vers `nextcloud.px.edulabs.local` fonctionne parfaitement, contrairement à `debian13.px.edulabs.local` qui n'est plus résolu. Et tout cela sans aucune intervention manuelle sur dnsmasq.
 
 
-## Fonctionnement du DNS dynamique
+Voilà on arrive à la fin de ticket, merci d'avoir lu jusqu'au bout !
+
+
+
+## Quelques ressources supplémentaires :
 
 ### Ce que fait dnsmasq pour les IP dynamiques (192.168.20.x)
 

@@ -128,6 +128,7 @@ chmod -R 2770 /srv/projets/proj_a
 Ce répertoire n'est pas un dépôt à utiliser pour travailler, mais une copie consultable.
 
 ## Coté Developpeur :
+
 ### Cloner le dépôt partagé en local vers son clone local
 Chaque développeur doit travailler dans sa propre copie locale du dépôt.
 
@@ -187,7 +188,7 @@ Et vous vous demandez :
 - “Où sont les modifs ?”
 - “Comment faire pour que les autres voient ces modifs ?”
 
-**1. Où vit vraiment le fichier README.md ?**
+**Où vit vraiment le fichier README.md ?**
 
 Il y a deux lieux à distinguer :
 

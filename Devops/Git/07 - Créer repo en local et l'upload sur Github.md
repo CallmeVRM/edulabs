@@ -94,9 +94,6 @@ Vous pouvez utiliser l’une ou l’autre selon vos préférences.
 
 GitHub vous propose maintenant plusieurs commandes. Nous allons utiliser celles adaptées à notre situation.
 
-**Ajouter le dépôt distant (HTTPS)**
-
-
 **Renommez la branche principale en "main"**
 ```bash
 git branch -M main
@@ -122,6 +119,12 @@ Chaque fois que vous ferez un push, ou un pull, c'est le dépôt distant (GitHub
 Si vous préférez une authentification sans mot de passe, passez par SSH.
 
 Assurez-vous que votre clé SSH est installée. voir [Créer une clé SSH et l’ajouter à GitHub](./06%20-%20Configurer%20Git%20avec%20une%20clé%20SSH.md).
+
+Pour vérifié que votre clé SSH fonctionne avec GitHub, utilisez la commande suivante :
+
+```bash
+ssh -T git@github.com
+```
 
 On suppose que vous partez d'un dossier vierge, donc on reprend depuis la création du répertoire et l’initialisation du dépôt Git local.
 
@@ -239,3 +242,9 @@ Pousser la branche vers GitHub :
 git push -u origin dev
 ```
 
+Sur la page GitHub de votre dépôt, vous verrez qu'une nouvelle branche a été poussée. Cliquez sur "Compare & pull request", ajoutez une description, puis cliquez sur "Create pull request".
+
+Si vous laissez le dépôt ainsi, vous aurez deux branches : `main` et `dev`, si vous faites des modifications en local, les fichiers modifiés seront sur la branche `dev` uniquement, ils ne seront pas visible sur la branche `main` tant que vous n’aurez pas fait le merge.
+
+
+Après révision, vous pouvez fusionner la branch `dev` avec la branche `main` en cliquant sur `Merge pull request` pour fusionner les modifications dans la branche principale.

@@ -8,33 +8,42 @@ nav_order: 50
 # dnsmasq
 
 ### Introduction
-Dnsmasq est un logiciel léger qui fournit des services de serveur DNS, DHCP...
+Dnsmasq est un service léger qui combine plusieurs fonctions essentielles pour un réseau local : un serveur DNS cache, un forwarder pour transmettre les requêtes vers des DNS externes, un serveur DHCP, et même un serveur TFTP/PXE pour le boot réseau si nécessaire.
 
-Dans cet article, nous allons mettre en place dnsmasq pour fournir des serv
+Je l’utilise ici dans un environnement Proxmox, mais il convient tout aussi bien à un homelab, une infrastructure simple ou un réseau isolé.
 
+Son intérêt est d’être **simple à configurer**, peu gourmand en ressources, et parfaitement adapté aux petits réseaux, labs, homelabs, environnements Proxmox, etc.
+
+Dans cet article, je vous montre comment mettre en place dnsmasq afin qu’il fournisse :
+
+- un DHCP classique ;
+- un DHCP avec réservations MAC (MAC → IP fixe) ;
+- un DNS avec auto-enregistrement des clients DHCP ;
+- des enregistrements DNS manuels ;
+
+le tout limité à une seule interface réseau, par exemple un bridge Proxmox dédié aux VMs.
 
 ### Installation
-Pour installer dnsmasq sur une distribution basée sur Debian/Ubuntu, utilisez la commande suivante :
+Sur une distribution basée sur Debian ou Ubuntu, l’installation est directe :
+Pour ma part, j’ai un conteneur LXC dédié à dnsmasq dans Proxmox.
 
 ```bash
 sudo apt update
 sudo apt install dnsmasq
 ```
 
-Si vous avez systemd-resolved actif (Ubuntu récent), assurez vous qu’il ne vient pas interférer sur le port 53.
+Si vous utilisez une distribution avec systemd-resolved, vérifiez qu’il ne monopolise pas le port 53 afin de ne pas interférer avec dnsmasq. Vous pouvez le faire en éditant `/etc/systemd/resolved.conf` et en mettant `DNSStubListener=no`, puis redémarrez systemd-resolved :
 
-**Ce que nous allons configurer :**
-    DHCP classique
-    DHCP avec réservations MAC
-    DNS avec auto-enregistrement des clients DHCP
-    Enregistrements DNS manuels
-    Le tout limité à une seule interface.
+```bash
+sudo systemctl restart systemd-resolved
+```
 
+### Préparer une configuration propre
 
+Je pars d’une configuration totalement épurée, en utilisant uniquement :
 
-### Partir avec un dnsmasq propre :
-
-On va tout mettre dans /etc/dnsmasq.conf + un fichier pour les hosts manuels dans /etc/dnsmasq.d/ :
+- /etc/dnsmasq.conf pour toute la configuration,
+- un dossier dédié aux entrées DNS manuelles.
 
 ```bash
 mv /etc/dnsmasq.conf /etc/dnsmasq.conf.bak
@@ -42,24 +51,17 @@ touch /etc/dnsmasq.conf
 mkdir -p /etc/dnsmasq-hosts
 ```
 
-### Fichier `/etc/dnsmasq.conf` complet (DHCP + DNS sur 1 interface)
-
-Editez le fichier `/etc/dnsmasq.conf` 
+### Fichier `/etc/dnsmasq.conf` complet pour DHCP + DNS avec auto-enregistrement
 
 ```bash
 sudo nano /etc/dnsmasq.conf
 ```
 
-Collez y la configuration suivante :
+Et j'ai mis en place configuration suivante :
 
 ```conf
-########################################
-#  dnsmasq - DHCP + DNS pour Proxmox  #
-#  Réseau : 192.168.20.0/24           #
-########################################
-
 # --- Limiter dnsmasq à l’interface LAN des VMs ---
-# Interface dans le conteneur (branchée sur le bridge Proxmox)
+# Interface dans le conteneur (raccorder à un bridge sur le Proxmox)
 interface=eth2
 
 # Se binder strictement à cette interface
@@ -91,9 +93,9 @@ server=8.8.8.8
 
 # --- DHCPv4 : plage dynamique ---
 # Réseau : 192.168.20.0/24
-# Plage dynamique pour les VMs "non critiques"
+# Plage dynamique pour les machines "non critiques"
 # Format : dhcp-range=<start>,<end>,<netmask>,<lease-time>
-dhcp-range=192.168.20.50,192.168.20.200,255.255.255.0,12h
+dhcp-range=192.168.20.100,192.168.20.200,255.255.255.0,12h
 
 # Passerelle par défaut (gateway du LAN)
 # Option 3 = router
@@ -118,20 +120,10 @@ dhcp-host=AA:AA:AA:AA:AA:02,192.168.20.11,db1,24h
 dhcp-host=AA:AA:AA:AA:AA:03,192.168.20.12,admin1,24h
 
 # Remarque :
-# - Ces IP (10,11,12) sont EN DEHORS de la plage dynamique (50-200),
-#   mais dans le même subnet : c’est un pattern classique.
+# - Ces IP (10,11,12) sont EN DEHORS de la plage dynamique (50-200), mais dans le même sous-réseau.
 
 # --- Fichier d’entrées DNS manuelles supplémentaires ---
-# Format type /etc/hosts
 addn-hosts=/etc/dnsmasq-hosts/local-hosts
-
-# Exemple :
-#   192.168.50.5   nas
-#   192.168.50.6   backup
-#
-# Avec expand-hosts + domain, ça deviendra :
-#   nas.pxmx.edulabs.local
-#   backup.pxmx.edulabs.local
 
 # --- Logs (optionnel, utile pour debug) ---
 log-queries
@@ -139,8 +131,8 @@ log-dhcp
 #log-facility=/var/log/dnsmasq.log
 ```
 
-### Fichier d’entrées DNS manuelles : /etc/dnsmasq-hosts/local-hosts
-On crée ce fichier pour les enregistrements non-DHCP (NAS, routeurs, services divers, etc.) :
+### Enregistrements DNS manuels : `/etc/dnsmasq-hosts/local-hosts`
+Je place mes enregistrements non-DHCP dans un fichier séparé :
 
 ```bash
 sudo nano /etc/dnsmasq-hosts/local-hosts
@@ -153,79 +145,104 @@ voici son contenu, que pouvez adapter selon vos besoins :
 192.168.20.2   nas
 192.168.20.3   backup
 192.168.20.4   registry
+192.168.20.10  vm1
+192.168.20.11  db1
+192.168.20.12  admin1
 ```
 
-Grâce à `expand-hosts` + `domain=px.edulabs.local`, dnsmasq vous répondra :
+Grâce à `expand-hosts` + `domain=px.edulabs.local`, dnsmasq génère automatiquement des enregistrements complets : :
 
 - `nas.px.edulabs.local` → 192.168.20.2
 - `backup.px.edulabs.local` → 192.168.20.3
 - `registry.px.edulabs.local` → 192.168.20.4
 
-### Vérifier la conf, démarrer et activer dnsmasq
+### Vérification et démarrage
 
-Vérifiez la syntaxe de votre fichier de configuration :
+Avant de démarrer le service, je vérifie la syntaxe :
 
 ```bash
 sudo dnsmasq --test
 ```
 
-Si tout est OK, vous aurez le message `dnsmasq: syntax check OK.`, redémarrez le service dnsmasq :
+Si tout est OK, vous aurez le message `dnsmasq: syntax check OK.`, 
+
+Je redémarre le service dnsmasq :
 
 ```bash
 sudo systemctl restart dnsmasq
 ```
 
+Je conseille également d’activer le service au démarrage :
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Configuration DHCP classique
-
-
-
-
-## Configuration DHCP avec filtrage MAC
-
-
-
-
-## Configuration DNS avec auto registry
-
-Configuration du cache DNS :
-`/etc/dnsmasq.conf`
-
-```conf
-# Activer et dimensionner le cache DNS
-cache-size=1000
-# Éviter les fuites DNS et les requêtes internes mal formées
-domain-needed
-bogus-priv
-# Étendre automatiquement les noms courts avec le domaine local
-expand-hosts
-# Interface sur laquelle dnsmasq écoute
-interface=eth0
-# Domaine interne pour les entrées DNS et DHCP
-domain=px.edulabs.local
-# Taille du cache DNS
-cache-size=256
+```bash
+sudo systemctl enable dnsmasq
 ```
 
-### Explication des options utilisées
+### Tests dans un environnement Proxmox
+
+J’ai ensuite créé un conteneur Debian sous Proxmox (LXC) nommé admin1, connecté au bridge vmbr20 avec une MAC fixe correspondant à ma réservation :
+
+```bash
+AA:AA:AA:AA:AA:03
+```
+
+Au démarrage du conteneur :
+
+- il a bien récupéré son adresse réservée : 192.168.20.12,
+- le domaine fourni est bien px.edulabs.local,
+- la résolution DNS fonctionne depuis le conteneur,
+- la résolution inverse (PTR) fonctionne également côté dnsmasq,
+- l’accès à des domaines publics fonctionne (dnsmasq transfère correctement aux upstream DNS).
+
+
+Pour pousser le test plus loin, j'ai créer une autre VM sans réservation MAC, qui a obtenu une IP dynamique dans la plage 100-200, ainsi que la configuration réseau (gateway, DNS) correcte via DHCP.
+
+Lors de la modification du hostname de cette VM, dnsmasq a automatiquement créé l’enregistrement DNS correspondant, après le redémarrage de la VM, sans touché à `dnsmasq`.
+
+
+## Fonctionnement du DNS dynamique
+
+### Ce que fait dnsmasq pour les IP dynamiques (192.168.20.x)
+
+Avec la configuration suivante :
+
+```conf
+dhcp-range=192.168.20.50,192.168.20.200,255.255.255.0,12h
+expand-hosts
+domain=px.edulabs.local
+log-dhcp
+log-queries
+```
+
+Lorsqu’une VM démarre :
+
+1. elle demande une IP via DHCP ;
+2. elle envoie son hostname (DHCP option 12 ou FQDN option 81) ;
+3. dnsmasq :
+
+    - attribue une IP,
+    - enregistre l’ensemble dans /var/lib/misc/dnsmasq.leases,
+    - crée un enregistrement DNS :
+        - hostname.px.edulabs.local → adresse.IP,
+    - ajoute l’entrée PTR inversée.
+
+Ainsi, même une machine prenant 192.168.20.100 aura automatiquement :
+
+```bash
+100.20.168.192.in-addr.arpa → hostname
+hostname.px.edulabs.local → 192.168.20.100
+```
+
+### Où sont stockés les baux (IP + Enregistrements DNS) ?
+
+Tous les enregistrements dynamiques (données DHCP et DNS associés) sont conservés ici :
+
+/var/lib/misc/dnsmasq.leases
+
+Vous pouvez vérifier ce fichier pour voir les baux actifs.
+
+
+### Explication des options utilisées dans le fichier de configuration `/etc/dnsmasq.conf` :
 - `cache-size=256` : Définit la taille du cache DNS à 256 entrées.
 - `domain-needed` : Ce paramètre bloque la résolution des noms incomplets. Une requête pour `serveur` reste locale et n’est jamais envoyée aux résolveurs externes. En revanche, `serveur.exemple.com` peut être résolue via les upstream DNS. C’est un garde-fou pour éviter des fuites vers le FAI ou le DNS public.
 - `expand-hosts` : Cette option permet d’ajouter automatiquement le domaine spécifié (ici `domain=px.edulabs.local`) aux noms d’hôtes locaux. Par exemple, si vous avez une entrée DHCP pour un hôte nommé `serveur`, avec cette option, dnsmasq le résoudra en `serveur.px.edulabs.local`.

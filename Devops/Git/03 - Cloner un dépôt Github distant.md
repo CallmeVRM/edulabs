@@ -172,7 +172,7 @@ Git sépare donc clairement :
 
 Cette mécanique permet de travailler à plusieurs en conservant un dépôt central propre, fiable et adapté à la collaboration locale.
 
-### Conclusion - Où sont les fichiers modifiés ?
+### Où sont les fichiers modifiés ?
 
 Avec votre utilisateur faisant office de développeur vous avez :
 
@@ -214,7 +214,7 @@ Workflow logique :
 - Il fait un push vers /srv/projets/mobile-app-quiz.git :
     - Git envoie les nouveaux objets (blob, tree, commit) vers le dépôt bare, et met à jour la ref refs/heads/main dans ce dépôt.
 
-Conclusion :
+### Conclusion :
 
 Les modifs sont bien dans /srv/projets/mobile-app-quiz.git, mais sous forme d’objets Git, pas comme fichiers visibles. Si tu ne me crois pas, tu peux vérifier avec un troisième utilisateur qui clone le dépôt bare dans son propre répertoire de travail : il verra les modifs de camel.
 

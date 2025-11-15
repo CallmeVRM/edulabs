@@ -1,9 +1,9 @@
 ---
-title: Scénarios
+title: Outils
 parent: Linux
-nav_order: 200
+nav_order: 140
 ---
 
-# Lab Linux — Scénario
+# Outils
 
 ## Présentation de la section en cours de rédaction.

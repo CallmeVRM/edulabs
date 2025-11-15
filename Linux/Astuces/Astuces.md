@@ -1,7 +1,7 @@
 ---
 title: Astuces
 parent: Linux
-nav_order: 3
+nav_order: 40
 ---
 
 # Astuces Divers

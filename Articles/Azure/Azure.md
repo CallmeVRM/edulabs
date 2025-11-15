@@ -2,6 +2,7 @@
 title: Azure
 parent: Articles
 nav_order: 10
+nav_exclude: true
 ---
 
 # Bienvenu dans la section Articles

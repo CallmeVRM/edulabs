@@ -1,372 +1,103 @@
 ---
-title: 03 - Cloner un dépôt Github distant
+title: 06 - Modifier du Code et Publier des Changements avec Git
 parent: Git
 grand_parent: Devops
 nav_order: 6
 nav_exclude: true
 ---
 
-# 05 - Brancher et Fusionner du Code avec Git
+# 06 - Modifier du Code et Publier des Changements avec Git
 
-Dans cette section, nous allons explorer une fonctionnalité des plus intéressante de Git : les branches (`branch`).
+- Installer et configurer Git (si ce n’est pas déjà fait) : [Voir Section 01 - Installer Git](./01%20-%20Installer%20Git.md)
+- Mettez en place une clé SSH pour GitHub (si ce n’est pas déjà fait) : [Voir Section 04 - Installer une clé SSH sur votre compte Github](./04%20-%20Installer%20une%20cl%C3%A9%20SSH%20sur%20votre%20compte%20Github.md)
 
-Lorsque nous travaillons sur un projet versionné avec Git, il est essentiel de pouvoir isoler une modification, expérimenter ou corriger un bug sans impacter la branche principale.
 
-Les branches permettent de travailler sur une fonctionnalité, une correction ou une expérimentation sans toucher directement à la branche principale (souvent master ou main).
-Une fois le travail terminé, les modifications sont fusionnées dans la branche principale.
+### Créer un fork d'un projet GitHub
 
-Ce flux de travail est fondamental dans tous les environnements professionnels
+Pour ma part je vais utiliser cette repository d'exemple : `https://github.com/vinta/awesome-python`
 
-Nous allons partir du principe que le projet est déjà initialisé en tant que dépôt Git.
+Comme on est dans un contexte collaboratif, la bonne pratique est de créer un fork du dépôt original dans son propre compte GitHub.
 
-### Créer une branche pour isoler une modification
+**La procédure** :
 
-Créer une branche consiste à créer un nouvel espace de travail parallèle.
-Cela nous permet de travailler sereinement, sans altérer directement la branche principale (master ou main).
+Après vous avoir connecté sur votre compte GitHub, allez y sur la page du dépôt et cliquez sur le bouton `Fork` en haut à droite.
 
-Créons une branche dédiée à la correction d'un fichier répondant sous le nom de `program.js` :
+![alt text](./images/fork.png "Fork d'un dépôt GitHub")
+
+1. Donnez lui un nom explicite si vous le souhaitez, et une description.
+2. Laissez cocher l'option `Copy the master branch only`
+3. Cliquez sur le bouton `Create fork`
+
+Vous avez maintenant une copie complète du dépôt dans votre compte GitHub.
+
+### Cloner le dépôt forké en local
+Revenons sur votre machine, et clonez le fork :
 
 ```bash
-git checkout -b fix-program-js
+git clone git@github.com:username/awesome-python.git
 ```
-Cette commande crée la branche `fix-program-js` et nous y place immédiatement.
-Nous travaillons désormais dans un contexte isolé, ce qui est la bonne pratique pour toute modification ciblée.
 
-### Corriger le fichier `program.js`
+Remplacez `username` par votre nom d'utilisateur GitHub.
+Si c'est la première fois que vous utilisez Git avec GitHub en SSH, vous devrez peut-être valider l'empreinte de la clé SSH de GitHub. Tapez `yes` et appuyez sur Entrée.
 
-Imaginons qu’une faute s’y soit glissée. Modifions le fichier :
+Entrez dans le répertoire cloné :
 ```bash
-nano program.js
+cd awesome-python
 ```
-Nous corrigeons l’erreur, puis nous enregistrons.
+Nous travaillons désormais dans une copie locale complète du projet, avec tout son historique.
 
+### Créer une branche pour notre modification
 
-### Valider la correction dans la branche
+Pour rester dans les bonnes pratiques, nous allons créer une branche dédiée à notre modification.
+
+```bash
+git checkout -b dev-doc-update
+```
+### Modifier le fichier `README.md`
+Utilisez votre éditeur de texte préféré pour modifier le fichier `README.md` et y ajouter un commentaire ou une amélioration.
+
+### Valider la modification avec un commit
+Avant de procéder au commit, vérifions l'état de notre dépôt avec la commande `git status` pour s'assurer que le fichier modifié est bien pris en compte.
+
 Une fois la modification effectuée, nous devons la valider à l’aide d’un commit.
 
-On vérifie d'abord que nous sommes bien sur la branche `fix-program-js` :
+On vérifie d'abord que nous sommes bien sur la branche `dev-doc-update` :
 
 ```bash
 git branch
 ```
 
-On aura un retour du type :
+On ajoute le fichier modifié à l'index et on crée un commit :
 ```bash
-* fix-program-js
-  main
+git commit -a -m "Mise à jour de la documentation dans README.md"
 ```
 
-On vérifie l'état de notre git avec la commande `git status` pour s'assurer que le fichier modifié est bien pris en compte.
-
-Ensuite, on ajoute le fichier corrigé à l'index et on crée un commit :
-```bash
-git commit -a -m "Correction de la faute dans program.js"
-```
 Le paramètre -a permet à Git de prendre en compte automatiquement tous les fichiers suivis, ca évite de faire un `git add` avant le commit.
 
-À ce stade, la branche fix-readme contient notre correction, parfaitement isolée du reste du projet.
-
-### Revenir sur la branche principale
-
-Pour intégrer notre travail, il faut d’abord revenir sur la branche principale :
-```bash
-git checkout main
-```
-Git nous replace dans le contexte principal du projet. On peut vérifieer avec `git branch` que nous sommes bien sur main.
-
-### Fusionner la branche de correction dans la branche principale
-Pour intégrer la correction effectuée dans la branche `fix-program-js`, nous utilisons la commande de fusion (`merge`) :
-```bash
-git merge fix-program-js
-```
-Si personne d’autre n’a modifié le même fichier en parallèle, la fusion est automatique.
-Le fichier contient maintenant la modification validée précédemment.
-
-### Conclusion
-
-Nous avons ainsi parcouru les bases du travail avec les branches :
-
-- créer une branche pour isoler un développement,
-
-- y effectuer des modifications,
-
-- valider le travail,
-
-- revenir sur la branche principale,
-
-- fusionner le résultat final.
-
-Ce flux de travail est au cœur de Git.
-Il permet de maintenir un projet propre, structuré, et de collaborer efficacement, que vous soyez seul ou au sein d’une équipe.
-
-Ce mécanisme étant fondamental, il servira de base à des pratiques plus avancées comme la gestion des conflits, le rebase ou les pull requests.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Dans ce guide, nous allons mettre en place un workflow collaboratif local avec Git, en utilisant un dépôt distant hébergé sur GitHub comme source initiale.:
-
-- **Un administrateur** récupère un dépôt GitHub et crée un dépôt central partagé sur un répertoire commun.
-
-- **Les développeurs** clonent ce dépôt central vers leurs répertoires personnels et poussent leurs modifications vers ce dépôt partagé.
-
-Pour que cette collaboration fonctionne, il est indispensable d’utiliser un dépôt Git bare du côté serveur, afin que Git accepte les push sans risque d’incohérence.
-
-## Coté Administrateur :
-### Création du dépôt central
-Nous allons créer un espace partagé dans /mnt/projets destiné à accueillir le dépôt central du projet. Le dépôt partagé utilisé comme point central doit être un dépôt bare, c’est-à-dire un dépôt Git sans working directory.
+### Pousser la branche sur GitHub
+Pour rendre notre branche accessible sur GitHub, nous devons la pousser vers le dépôt distant.
 
 ```bash
-git init --bare /mnt/projets/proj_a.git
+git push origin dev-doc-update
 ```
 
-Dans cet exemple, tous les développeurs du projet A appartiennent au groupe Unix dev_proj_a.
-Nous ajustons donc les permissions pour garantir :
+### Créer une Pull Request sur GitHub
+Revenons sur GitHub dans la page de notre fork.
 
-- un accès restreint
-- une collaboration fluide
-- une gestion cohérente des permissions grâce au bit setgid
+Vous verrez un bouton `Compare & pull request` pour notre branche récemment poussée.
+![alt text](./images/06-PullRequestAsk.png "Créer une Pull Request")
 
-Mise en place des permissions :
-```bash
-chown -R root:dev_proj_a /mnt/projets/proj_a.git
-chmod -R 2770 /mnt/projets/proj_a.git
-```
-Le dépôt central est maintenant prêt à recevoir des pushes.
+Cliquez sur le bouton `Compare & pull request`.
 
-### Importer un projet GitHub dans le dépôt central
-L’administrateur récupère le dépôt GitHub dans sa zone personnelle :
+Donnez un titre explicite à votre Pull Request, décrivez les modifications apportées, puis cliquez sur `Create pull request`.
 
-git clone https://github.com/nom-utilisateur/nom-depot.git
-cd nom-depot
+Arrivé a cette étape vous devez être vigilants, il faut bien choisir vers quel dépôt vous souhaitez faire la Pull Request. 
 
-À ce stade, vous êtes dans votre copie locale du projet GitHub :
+Pour un projet open source forké, vous pouvez faire une PR vers le dépôt original (upstream) ou vers votre propre fork (head). L'objectif ici est de faire une PR vers le dépôt forké.
 
-```bash
-/home/admin/nom-depot
-```
+![alt text](./images/choix_pr_destination.png "Choisir la destination de la Pull Request")
 
-Dans ce répertoire, Git conserve :
+Vous pouvez assigner des relecteurs si besoin, mais comme dans cette exemple vous êtes le seul contributeur, une fois la PR créee, vous pouvez la fusionner vous même en cliquant sur le bouton `Merge pull request`, en ajoutant un message explicite et clair. Confirmez le merge
 
-- votre espace de travail (fichiers visibles)
-- le dossier .git/ contenant l’historique
-- les branches
-- les commits locaux
+Maintenant si vous allez sur l'onglet `Code` de votre dépôt forké, vous verrez que le fichier `README.md` a bien été mis à jour avec votre modification.
 
-Ce clone va être utilisé pour pousser son contenu dans le dépôt central.
-
-Or dans cette configuration, vous êtes désormais dans le répertoire local du projet github, cette copie pour l'instant n'est pas encore liée au dépôt partagé localement, elle est connectée uniquement au dépôt distant github. Et vous pouvez vérifier cela avec la commande:
-
-```bash
-git remote -v
-```
-Vous voyez que l'URL du dépôt distant github est bien référencée.
-
-```bash
-origin  https://github.com/nom-utilisateur/nom-depot.git (fetch)
-origin  https://github.com/nom-utilisateur/nom-depot.git (push)
-```
-
-Si vous modifiez un fichier et que vous faites un `push` maintenant, vous pousserez vos modifications directement sur github.
-
-Or, nous voulons pousser non pas vers GitHub, mais vers notre dépôt local /mnt/projets/proj_a.git.
-
-On remplace l’origine GitHub par l’origine locale :
-```bash
-git remote remove origin
-git remote add origin /mnt/projets/proj_a.git
-```
-Puis on pousse le code vers le dépôt bare (ma branche principale s'appelle main dans cet exemple) :
-Vous pouvez vérifier le nom de votre branche principale avec la commande `git branch` avant de faire le push.
-
-```bash
-git push -u origin main
-```
-Le dépôt central contient maintenant l’intégralité du projet.
-
-
-
-### (Optionnel) Créer un working directory partagé
-Si vous souhaitez disposer d’une copie lisible par tous (pour un outil interne, un serveur web ou une revue), vous pouvez générer un working directory séparé :
-```bash
-git clone /mnt/projets/proj_a.git /home/admin/proj_a
-```
-Permissions :
-```bash
-chown -R root:dev_proj_a /mnt/projets/proj_a
-chmod -R 2770 /mnt/projets/proj_a
-```
-Ce répertoire n'est pas un dépôt à utiliser pour travailler, mais une copie consultable.
-
-## Coté Developpeur :
-### Cloner le dépôt partagé en local vers son clone local
-Chaque développeur doit travailler dans sa propre copie locale du dépôt.
-
-Le développeur commence donc par créer un répertoire dédié dans le $HOME :
-
-```bash
-mkdir ~/proj_a
-cd ~/proj_a
-```
-Ensuite, on déclare le dépôt partagé comme “safe directory” uniquement pour éviter les avertissements de sécurité Git :
-```bash
-git config --global --add safe.directory /mnt/projets/proj_a.git/
-```
-Puis on clone le dépôt bare :
-```bash
-git clone /mnt/projets/proj_a .
-```
-Le `.` signifie que Git place le clone directement dans le répertoire courant.
-
-À ce stade, le développeur peut modifier les fichiers du projet, par exemple :
-```bash
-nano README.md
-```
-Puis il enregistrez les modifications :
-```bash
-git add .
-git commit -m "Premier commit local"
-git push origin master
-```
-
-Chaque développeur travaille dans son propre espace local, en toute autonomie. Lorsqu’il pousse ses modifications, Git les enregistre dans le dépôt central — le dépôt bare.
-À ce stade, les changements sont bien présents dans le dépôt partagé… mais uniquement dans sa base de données Git interne.
-
-Un dépôt bare n’a pas de copie directe des fichiers du projet :
-il stocke les commits, les arbres, les blobs, mais pas de working directory.
-Autrement dit, le dépôt central connaît parfaitement les nouvelles versions, mais il ne possède aucun fichier lisible comme README.md ou src/….
-
-Pour rendre ces modifications visibles dans une copie de travail lisible par un humain (le working directory du dépôt partagé), il faut qu’un utilisateur — généralement l’administrateur, ou le propriétaire du clone de travail partagé — exécute :
-
-```bash
-git pull
-```
-
-Ce git pull ne contacte pas GitHub il agit localement :
-
-- il récupère simplement les mises à jour depuis le dépôt bare et met à jour les fichiers du répertoire /home/<Admin>/proj_a. Le répertoire de travail ou l'administrateur a cloné le dépôt depuis github.
-Ainsi, les fichiers du dépôt partagé reflètent fidèlement les derniers commits envoyés par les développeurs.
-
-Git sépare donc clairement :
-
-- le stockage interne des versions (dans le dépôt bare),
-- et la mise à jour visible des fichiers (dans le working tree, via git pull).
-
-Cette mécanique permet de travailler à plusieurs en conservant un dépôt central propre, fiable et adapté à la collaboration locale.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Créer un dépôt Git central (bare)
-
-Créons donc le dépôt central en mode bare dans le répertoire partagé.
-
-```bash
-git init --bare /mnt/projets/proj_a.git
-```
-
-On ajuste ses permissions :
-```bash
-chown -R root:dev_proj_a /mnt/projets/proj_a.git
-chmod -R 2770 /mnt/projets/proj_a.git
-```
-
-Ce dépôt .git est désormais le remote officiel utilisé par toute l’équipe.
-
-### Importer le dépôt GitHub dans le dépôt central
-
-**Cloner le dépôt GitHub**
-
-depuis un compte administrateur, clonons le dépôt GitHub distant sur la machine locale au niveau de son home (par exemple).
-
-```bash
-git clone https://github.com/nom-utilisateur/nom-depot.git
-```
-
-Git télécharge alors :
-
-- tous les fichiers du projet
-- toutes les versions précédentes
-- tout l’historique complet du dépôt
-
-et crée automatiquement un nouveau dossier du même nom que le dépôt GitHub. Si le projet s’appelle `nom-depot`, un dossier du nom `nom-depot` est créé.
-
-**Entrer dans le dossier cloné**
-
-```bash
-cd nom-depot
-```
-
-
-Nous retirons donc l’origine GitHub :
-```bash
-git remote remove origin
-```
-
-Puis nous ajoutons le dépôt central local comme nouvelle origine :
-```bash
-git remote add origin /mnt/projets/proj_a.git
-```
-
-**Pousser le code vers le dépôt central**
-Envoyez maintenant tout le contenu du dépôt (branches, commits…) vers le dépôt bare :
-```bash
-git push -u origin master
-```
-
-Le dépôt partagé /mnt/projets/proj_a.git contient désormais tout le projet GitHub, mais dans une version adaptée au travail collaboratif interne.
-
-À partir de là, le dépôt partagé devient l’unique “source de vérité” pour l’équipe locale.
-
-
-
-
-
-
-
-
-
-Edit le fichier README.md ensuite git add . et git commit -m "Premier commit local" puis git push origin master pour pousser les modifications vers le dépôt partagé.
-
-tout les changement sont maintenant pris en compte par git.
-
-cependant jusqu'à présent, seul l'administrateur peut intervenir pour pousser des modifications vers le dépôt partagé.
-
-## Coté Administrateur :
-
-git pull
-
-maitnenant tout

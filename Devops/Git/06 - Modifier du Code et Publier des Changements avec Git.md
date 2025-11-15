@@ -3,7 +3,7 @@ title: 06 - Modifier du Code et Publier des Changements avec Git
 parent: Git
 grand_parent: Devops
 nav_order: 6
-nav_exclude: true
+nav_exclude: false
 ---
 
 # 06 - Modifier du Code et Publier des Changements avec Git

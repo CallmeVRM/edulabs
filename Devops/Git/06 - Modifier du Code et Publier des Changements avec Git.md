@@ -2,101 +2,104 @@
 title: 03 - Cloner un dépôt Github distant
 parent: Git
 grand_parent: Devops
-nav_order: 4
-nav_exclude: false
+nav_order: 6
+nav_exclude: true
 ---
 
-# 04 - Sécuriser l’Accès à GitHub avec une Clé SSH
+# 05 - Brancher et Fusionner du Code avec Git
 
-Dans cette section, nous allons apprendre à sécuriser l’accès à GitHub en utilisant une clé SSH.
-L’objectif est simple : remplacer l’authentification par mot de passe par une authentification cryptographique, plus sûre et plus pratique.
+Dans cette section, nous allons explorer une fonctionnalité des plus intéressante de Git : les branches (`branch`).
 
-Ce mécanisme est essentiel en environnement professionnel, il permet de travailler avec GitHub sans ressaisir de mot de passe, tout en renforçant la sécurité des dépôts.
+Lorsque nous travaillons sur un projet versionné avec Git, il est essentiel de pouvoir isoler une modification, expérimenter ou corriger un bug sans impacter la branche principale.
 
-### Générer une clé SSH :
-la première étape consiste à générer une paire de clés SSH (une clé publique et une clé privée) sur votre machine locale :
+Les branches permettent de travailler sur une fonctionnalité, une correction ou une expérimentation sans toucher directement à la branche principale (souvent master ou main).
+Une fois le travail terminé, les modifications sont fusionnées dans la branche principale.
 
-ssh-keygen -t ed25519 -C "Clé SSH pour GitHub"
+Ce flux de travail est fondamental dans tous les environnements professionnels
 
-le -C permet d’ajouter un commentaire pour identifier la clé plus facilement.
+Nous allons partir du principe que le projet est déjà initialisé en tant que dépôt Git.
 
-Git vous demandera : 
-- le chemin où sauvegarder la clé (choisissez le votre ou appuyez sur Entrée pour le chemin par défaut)
-- une passphrase (optionnelle mais recommandée pour plus de sécurité)
+### Créer une branche pour isoler une modification
 
-Une fois la clé générée, une image randomart sera affichée pour représenter visuellement la clé.
+Créer une branche consiste à créer un nouvel espace de travail parallèle.
+Cela nous permet de travailler sereinement, sans altérer directement la branche principale (master ou main).
 
-Si vous avez choisis le chemin par défaut, la clé privée sera stockée dans `~/.ssh/id_ed25519` et la clé publique dans `~/.ssh/id_ed25519.pub`.
+Créons une branche dédiée à la correction d'un fichier répondant sous le nom de `program.js` :
 
-**Si vous avez un gestionnaire de mot de passe (Keepass...) et vous devez en avoir un, vous pouvez y enregistrer la passphrase et la clé privée**
-
-Exécuté la commande suivante pour afficher le contenu de la clé publique :
 ```bash
-cat ~/.ssh/id_ed25519.pub
+git checkout -b fix-program-js
 ```
-Copiez l’intégralité de la ligne affichée.
+Cette commande crée la branche `fix-program-js` et nous y place immédiatement.
+Nous travaillons désormais dans un contexte isolé, ce qui est la bonne pratique pour toute modification ciblée.
 
-Cette clé contient un préfixe `ssh-ed25519` suivi d’une longue suite de caractères : c’est normal.
+### Corriger le fichier `program.js`
 
-Vous avez la possibilité d'utiliser votre clé SSH pour s'authentifier et pour signé vos commits, Choisir `Authentication key` suffit totalement pour travailler sur un dépôt GitHub, mais si vous souhaitez également signer vos commits avec cette clé, vous devez répéter les étapes suivante deux fois et choisir `Signing key` à la deuxième reprise.
-
-### Ajouter la clé SSH à votre compte GitHub :
-Rendez-vous sur votre compte `GitHub` :
-1. Allez dans les paramètres `Settings`
-2. Dans le menu de gauche, cliquez sur `SSH and GPG keys`
-3. Cliquez sur le bouton `New SSH key`
-4. Donnez un nom explicite à votre clé (par exemple `Laptop perso`, `Laptop pro`)
-5. Laissez le type sur `Authentication key`
-6. Collez votre clé publique que vous venez de copier dans le champ `Key`
-7. Validez
-
-![alt text](./images/ssh_key_github_add.png "Ajouter une clé SSH sur GitHub")
+Imaginons qu’une faute s’y soit glissée. Modifions le fichier :
+```bash
+nano program.js
+```
+Nous corrigeons l’erreur, puis nous enregistrons.
 
 
-**Différence entre Clés SSH d’Authentification et Clés de Signature**
+### Valider la correction dans la branche
+Une fois la modification effectuée, nous devons la valider à l’aide d’un commit.
 
-GitHub distingue deux types de clés SSH, chacune ayant un rôle bien spécifique :
+On vérifie d'abord que nous sommes bien sur la branche `fix-program-js` :
 
-- Clé d’authentification (Authentication Key) : C’est la clé classique utilisée pour accéder à vos dépôts GitHub.
+```bash
+git branch
+```
 
-Elle permet de :
-    - cloner un dépôt,
-    - pousser des modifications,
-    - récupérer des mises à jour (git pull).
+On aura un retour du type :
+```bash
+* fix-program-js
+  main
+```
 
-Si votre objectif est simplement de travailler avec vos dépôts, une clé d’authentification suffit.
+On vérifie l'état de notre git avec la commande `git status` pour s'assurer que le fichier modifié est bien pris en compte.
 
-- Clé de signature (Signing Key)
+Ensuite, on ajoute le fichier corrigé à l'index et on crée un commit :
+```bash
+git commit -a -m "Correction de la faute dans program.js"
+```
+Le paramètre -a permet à Git de prendre en compte automatiquement tous les fichiers suivis, ca évite de faire un `git add` avant le commit.
 
-Une clé de signature sert à signer cryptographiquement vos commits.
+À ce stade, la branche fix-readme contient notre correction, parfaitement isolée du reste du projet.
 
-Elle garantit :
-    - que le commit provient réellement de vous,
-    - qu’il n’a pas été modifié ou falsifié,
-    - qu’un tiers n’a pas usurpé votre nom ou email Git.
+### Revenir sur la branche principale
 
-Ce mécanisme renforce la confiance dans l’historique du projet, surtout dans les environnements professionnels ou open source.
+Pour intégrer notre travail, il faut d’abord revenir sur la branche principale :
+```bash
+git checkout main
+```
+Git nous replace dans le contexte principal du projet. On peut vérifieer avec `git branch` que nous sommes bien sur main.
+
+### Fusionner la branche de correction dans la branche principale
+Pour intégrer la correction effectuée dans la branche `fix-program-js`, nous utilisons la commande de fusion (`merge`) :
+```bash
+git merge fix-program-js
+```
+Si personne d’autre n’a modifié le même fichier en parallèle, la fusion est automatique.
+Le fichier contient maintenant la modification validée précédemment.
 
 ### Conclusion
 
-Vous avez maintenant :
+Nous avons ainsi parcouru les bases du travail avec les branches :
 
-- généré une clé SSH sur votre machine,
-- ajouté cette clé à votre compte GitHub,
-- testé l’accès sécurisé en clonant un dépôt via SSH.
+- créer une branche pour isoler un développement,
 
-Ce mode de connexion est indispensable pour travailler efficacement en environnement professionnel.
+- y effectuer des modifications,
 
+- valider le travail,
 
+- revenir sur la branche principale,
 
+- fusionner le résultat final.
 
+Ce flux de travail est au cœur de Git.
+Il permet de maintenir un projet propre, structuré, et de collaborer efficacement, que vous soyez seul ou au sein d’une équipe.
 
-
-
-
-
-
-
+Ce mécanisme étant fondamental, il servira de base à des pratiques plus avancées comme la gestion des conflits, le rebase ou les pull requests.
 
 
 

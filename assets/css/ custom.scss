@@ -1,0 +1,47 @@
+/* ---------------------------------------------------------
+   Overrides Just the Docs – custom.scss
+   Ce fichier est chargé APRES les styles du thème
+   --------------------------------------------------------- */
+
+/* -------------------------
+   Largeur de la sidebar
+   ------------------------- */
+$nav-width: 600px;   // Ajuste ici si tu veux plus large (320 / 360 / 400)
+
+/* -------------------------
+   Styles des titres
+   ------------------------- */
+
+/* h1 */
+.main-content h1 {
+  font-size: 5rem;     // Taille
+  font-weight: 700;      // Gras
+  color: #1a2b4c;        // Couleur
+  font-family: "Inter", sans-serif; // Police optionnelle
+  margin-top: 2.2rem;
+}
+
+/* h2 */
+.main-content h2 {
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: #213456;
+  font-family: "Inter", sans-serif;
+  margin-top: 2rem;
+}
+
+/* h3 */
+.main-content h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #334b73;
+  font-family: "Inter", sans-serif;
+  margin-top: 1.6rem;
+}
+
+/* h4 si besoin */
+.main-content h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #445b80;
+}

@@ -13,7 +13,7 @@ Edulabs est à la fois :
 - Un espace personnel où je documente mes tests de technologies, mes résolutions de bugs et mes trouvailles du quotidien.
 - Une plateforme d’apprentissage en construction, conçue pour mettre l’accent sur la pratique combiné à la théorie.
 
-## Ma vision
+### Ma vision
 
 Edulabs n’a pas vocation à être une énième plateforme théorique. Mon objectif est de créer un espace :
 
@@ -21,13 +21,13 @@ Edulabs n’a pas vocation à être une énième plateforme théorique. Mon obje
 - Pratique : des labs concrets qui reproduisent de vraies situations.
 - Évolutif : du simple partage d’un outil utile jusqu’à des parcours pédagogiques immersifs.
 
-## Ce que vous trouverez ici
+### Ce que vous trouverez ici
 
 - Des retours d’expérience sur Linux, Azure, Kubernetes, Podman, Incus et d’autres technos.
 - Des solutions et astuces face aux problèmes rencontrés au quotidien.
 - Des scénarios de labs réalistes, pensés pour renforcer vos compétences et surtout votre confiance.
 
-## Pourquoi Edulabs ?
+### Pourquoi Edulabs ?
 
 Au fil de mon parcours, j’ai constaté que la plupart des labs proposés ailleurs étaient trop :
 - Simplistes : utiles pour débuter, mais loin de la réalité du terrain.

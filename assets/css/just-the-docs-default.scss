@@ -17,29 +17,35 @@ $nav-width: 100px;
 .main-content h1 {
   font-size: 2.4rem !important;
   font-weight: 700 !important;
-  color: #533b6e !important;
+  color: #000000 !important;
 }
 
 .main-content h2 {
   font-size: 2.1rem !important;
-  font-weight: 600 !important;
-  color: #5c1c53 !important;
+  font-weight: 700 !important;
+  color: rgb(35, 101, 110) !important;
 }
 
 .main-content h3 {
   font-size: 1.8rem !important;
-  font-weight: 600 !important;
-  color: #5c1c53 !important;
+  font-weight: 700 !important;
+  color: #4c2479!important;
 }
 
-.main-content h5 {
+.main-content h4 {
   font-size: 1.5rem !important;
-  font-weight: 600 !important;
-  color: #5c1c53 !important;
+  font-weight: 700 !important;
+  color: #4c2479 !important;
 }
 
 .main-content h5 {
   font-size: 1.2rem !important;
-  font-weight: 600 !important;
-  color: #79256d !important;
+  font-weight: 700 !important;
+  color: #4c2479  !important;
+}
+
+.main-content h6 {
+  font-size: 1.0rem !important;
+  font-weight: 700 !important;
+  color: #783abe !important;
 }

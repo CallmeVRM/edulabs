@@ -196,23 +196,99 @@ Créer un repository depuis le DVD permet :
 - de servir un dépôt sur plusieurs machines via HTTP,
 - de travailler hors ligne dans un environnement de labo.
 
-
-
+#### Commandes utiles pour la gestion des repositories
 ```bash
 ls /etc/yum.repos.d/
 cat /etc/yum.repos.d/redhat.repo
 dnf repolist
 dnf repolist --all
-```
-
-```bash 
-# afficher le status de la souscription
 subscription-manager status
-
 # lister les repositories disponibles
 subscription-manager repos --list
-dnf repolist
 ```
+
+### Gestion avancée des mises à jour & métadonnées :
+RHEL 10 permet une gestion avancée des mises à jour grâce aux métadonnées Red Hat.
+Ces métadonnées incluent :
+
+- des tags de sécurité ;
+- les niveaux de sévérité (Critical, Important, Moderate, etc.) ;
+- les RHSA (Red Hat Security Advisories).
+
+#### Lire les informations d’updates (métadonnées)
+
+Pour afficher toutes les catégories d'updates disponibles :
+```bash
+dnf updateinfo list
+```
+On obtient par exemple :
+
+- 16 security updates
+- 33 bug fixes
+- 3 enhancements
+
+#### Filtrer uniquement les mises à jour de sécurité
+```bash
+dnf updateinfo list security
+```
+Cela affiche uniquement les security advisories (ex : les 16 notifications de sécurité).
+
+#### Filtrer selon un niveau de sévérité
+```bash
+dnf updateinfo list --sec-severity=Critical
+dnf updateinfo list --sec-severity=Important,Moderate,Low
+```
+
+#### Obtenir le détail d’une notification de mise à jour :
+On peut afficher le contenu exact d’une mise à jour, donc pour avoir plus d'infos sur une notification spécifique :
+
+```bash
+dnf updateinfo info RHSA-2025:1234
+```
+Le détail inclut :
+
+- les paquets concernés
+- les CVE
+- le numéro RHSA, par ex. : `RHSA-2025:1234`
+
+Une mise à jour accompagnée de son ID.
+
+
+#### Mettre à jour uniquement un advisory spécifique
+Pour appliquer uniquement une mise à jour de sécurité spécifique :
+```bash
+dnf update --advisory=RHSA-2025:1234
+```
+Cela met uniquement à jour les paquets liés à cet avis, rien d’autre.
+
+#### Mettre à jour uniquement les mises à jour de sécurité Important, et Critical
+Exemple : appliquer automatiquement toutes les mises à jour critiques/urgentes :
+```bash
+dnf update --sec-severity=Critical,Important
+```
+
+#### Info supplémentaire et importante
+Les mises à jour de sécurité sont cruciales, mais comme dans la nuit des temps, certaines mises à jour peuvent introduire des bugs ou des incompatibilités, il est important de savoir machine arrière.
+
+dnf garde un historique des transactions, permettant de revenir en arrière si nécessaire.
+
+
+Voici quelques commandes pour du `en cas où` :
+```bash
+dnf history list
+dnf history info <ID_transaction>
+dnf history undo <ID_transaction>
+```
+
+Le rollback (undo) permet de :
+- downgrade les paquets mis à jour 
+- supprime les paquets installés pendant la mise à jour 
+C’est pratique si une mise à jour casse une dépendance ou provoque un comportement inattendu.
+
+
+
+
+
 
 ### Gestion des paquets avec dnf
 
@@ -306,5 +382,59 @@ dnf provides <*/bin/tree>
 
 ---
 
-## Lab - Gestion des paquets avec dnf et les modules.
+## Labs - 
+### Lab 001- Gestion des paquets avec dnf et les modules.
 
+- Trouvez un paquet contenant une ` Virtualization API`.
+```bash
+dnf search Virtualization API
+```
+- Trouvez un paquet fournissant un "`web server` et `reverse proxy`".
+```bash
+dnf search web server reverse proxy
+```
+- Trouvez un outil combinant "`traceroute` et `ping`".
+```bash
+dnf search traceroute ping
+```
+
+- Trouvez le paquet fournissant `nmap` :
+    - déterminer s’il est installé ou non
+    - afficher des infos supplémentaires
+    - lister les fichiers fournis
+```bash
+dnf list nmap
+dnf info nmap
+dnf repoquery --available -l nmap
+```
+
+
+- Avec la commande `dnf provides` trouvez le paquet fournissant l'outil `netstat` :
+    - Affichez les informations du paquet, et lister les fichiers fournit par le paquet.
+
+```bash
+sudo dnf list net-tools
+sudo dnf info net-tools
+sudo dnf repoquery --installed -l net-tools
+```
+
+- Utilisez `dnf provides` pour trouver le paquet qui fournit le fichier `smb.conf`, (uniquement les paquets installés).
+
+```bash
+sudo dnf provides "*/smb.conf"
+sudo dnf list samba-common
+```
+
+- Utilisez `dnf repoquery` pour afficher les informations supplémentaire sur le paquet trouvé précédement.
+```bash
+sudo dnf repoquery --installed -i samba-common
+```
+
+
+- Utilisez `dnf repoquery` pour Identifier le paquet propriétaire de `/etc/chrony.conf` (uniquement les paquets installés).
+```bash
+sudo dnf repoquery --installed -f "/etc/chrony.conf"
+sudo dnf repoquery --installed -f "/etc/chrony.conf" -i
+```
+
+### Lab 002 - Gestion des paquets avec dnf et les modules.

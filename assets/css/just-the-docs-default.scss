@@ -70,12 +70,7 @@ $nav-width: 100px;
   .side-bar,
   .site-nav,
   .site-header,
-  .site-footer {
-    width: 30rem !important;  /* ≈ 352px */
-    flex: 0 0 22rem !important;
-  }
-
   .main {
-    margin-left: 22rem !important;
+    margin-left: 10rem !important;
   }
 }

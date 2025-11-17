@@ -66,11 +66,37 @@ $nav-width: 100px;
 
 
 /* Modification Menu Gauche*/
-@media (min-width: 50.5rem) {
-  .side-bar,
-  .site-nav,
+@media (min-width: 66.5rem) {
+
+  /* Largeur de la sidebar */
+  .side-bar {
+    width: 22rem !important;          /* Sidebar */
+    flex: 0 0 22rem !important;
+  }
+
+  /* Navigation interne */
+  .site-nav {
+    width: 22rem !important;
+    flex: 0 0 22rem !important;
+  }
+
+  /* Header et footer latéraux */
   .site-header,
+  .site-footer {
+    width: 22rem !important;
+    flex: 0 0 22rem !important;
+  }
+
+  /* Wrapper du contenu */
   .main {
-    margin-left: 10rem !important;
+    margin-left: 22rem !important;
+    max-width: calc(100% - 22rem) !important;
+  }
+
+  /* Zone texte */
+  .page-content,
+  .main-content {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
   }
 }

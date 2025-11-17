@@ -68,35 +68,39 @@ $nav-width: 100px;
 /* Modification Menu Gauche*/
 @media (min-width: 66.5rem) {
 
-  /* Largeur de la sidebar */
+  /* Sidebar conteneur complet */
   .side-bar {
-    width: 22rem !important;          /* Sidebar */
+    width: 22rem !important;
     flex: 0 0 22rem !important;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;                 /* Hauteur totale */
   }
 
-  /* Navigation interne */
+  /* Navigation */
   .site-nav {
     width: 22rem !important;
-    flex: 0 0 22rem !important;
+    flex: 1 1 auto !important;     /* La nav prend toute la hauteur dispo */
+    overflow-y: auto;
   }
 
-  /* Header et footer latéraux */
-  .site-header,
+  /* Header */
+  .site-header {
+    width: 22rem !important;
+    flex: 0 0 auto !important;
+  }
+
+  /* Footer fixe en bas */
   .site-footer {
     width: 22rem !important;
-    flex: 0 0 22rem !important;
+    flex: 0 0 auto !important;     /* Footer non compressé */
+    margin-top: auto !important;   /* Le footer colle au bas */
+    padding-bottom: 1rem;          /* Petit espace */
   }
 
-  /* Wrapper du contenu */
+  /* Correction du contenu principal */
   .main {
     margin-left: 22rem !important;
     max-width: calc(100% - 22rem) !important;
-  }
-
-  /* Zone texte */
-  .page-content,
-  .main-content {
-    padding-left: 2rem !important;
-    padding-right: 2rem !important;
   }
 }

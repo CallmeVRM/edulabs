@@ -1,9 +1,9 @@
 ---
 title: brainstorming
-grand_parent: RHCSA
 parent: Packages & Repositories
-nav_order: 10
-has_children: true
+grand_parent: RHCSA
+nav_order: 41
+has_children: false
 nav_exclude: false
 ---
 

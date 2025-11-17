@@ -13,39 +13,53 @@
 /* Largeur du menu gauche */
 $nav-width: 100px;
 
+/* Désactiver la mise en majuscule par défaut pour les titres */
+.main-content h1,
+.main-content h2,
+.main-content h3,
+.main-content h4,
+.main-content h5,
+.main-content h6 {
+
+}
+
+
 /* Titres */
 .main-content h1 {
-  font-size: 2.4rem !important;
+  font-size: 2.3rem !important;
   font-weight: 700 !important;
   color: #000000 !important;
 }
 
 .main-content h2 {
-  font-size: 2.1rem !important;
+  font-size: 2.0rem !important;
   font-weight: 700 !important;
-  color: rgb(35, 101, 110) !important;
+  color: rgb(109, 13, 153) !important;
 }
 
 .main-content h3 {
-  font-size: 1.8rem !important;
+  font-size: 1.7rem !important;
   font-weight: 700 !important;
-  color: #4c2479!important;
+  color: rgb(109, 13, 153) !important;
 }
+
 
 .main-content h4 {
   font-size: 1.5rem !important;
   font-weight: 700 !important;
-  color: #4c2479 !important;
+  color: rgb(109, 13, 153) !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
 }
 
 .main-content h5 {
   font-size: 1.2rem !important;
   font-weight: 700 !important;
-  color: #4c2479  !important;
+  color: rgb(109, 13, 153) !important;
 }
 
 .main-content h6 {
   font-size: 1.0rem !important;
   font-weight: 700 !important;
-  color: #783abe !important;
+  color: rgb(182, 23, 255) !important;
 }

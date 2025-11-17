@@ -1,8 +1,8 @@
 ---
-title: packages & repository
+title: Packages & Repositories
 parent: RHCSA
 nav_order: 40
 has_children: true
 ---
 
-# RHCSA - Red Hat Certified System Administrator 10
+# RHCSA 10 - Packages & Repositories

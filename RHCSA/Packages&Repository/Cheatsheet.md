@@ -170,4 +170,3 @@ Sous RHEL 10, c'est souvent un plugin dnf5.
 - Le réflexe absolu : `dnf clean all` suivi de `dnf makecache`.
 
 
-#### Architecture & Dépôts (Repositories)

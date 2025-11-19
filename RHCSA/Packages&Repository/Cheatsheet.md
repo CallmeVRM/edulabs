@@ -1,5 +1,5 @@
 ---
-title: brainstorming
+title: Cheatsheet
 parent: Packages & Repositories
 grand_parent: RHCSA
 nav_order: 42

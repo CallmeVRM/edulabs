@@ -79,8 +79,6 @@ Utilisez ces commandes pour rechercher des paquets, lister les paquets disponibl
 - `dnf list <paquet>` Lister un paquet spécifique.
 
 
-
-
 **LA COMMANDE : provides**
 
 Cas : "Installez l'outil qui génère le fichier /etc/mime.types"
@@ -154,15 +152,18 @@ Un fichier de config a été modifié ou un binaire corrompu ?
 
 Le plugin `versionlock` permet d'empêcher la mise à jour d'un paquet critique en verrouillant sa version, utile pour garantir une compatibilité applicative.
 
-Empêcher la mise à jour d'un paquet critique.
+Empêcher la mise à jour d'un paquet critique. Sous RHEL 10, c'est souvent un plugin dnf.
 
-Sous RHEL 10, c'est souvent un plugin dnf5.
+- `dnf install dnf-plugin-versionlock -y` : Installer le plugin versionlock.
+- `dnf versionlock add httpd` : Geler la version actuellement installée du paquet httpd. (DNF empêchera désormais toute mise à jour de ce paquet.)
+- `dnf versionlock list` : Afficher la liste des paquets dont la version est verrouillée.
+- `dnf versionlock delete httpd` : Retirer le gel appliqué au paquet httpd.
+- `dnf versionlock clear` : Supprimer tous les verrous de version existants.
 
-- Installer le plugin (si besoin) : `dnf install dnf-command(versionlock)`
-- Verrouiller : `dnf versionlock add httpd` (Httpd ne se mettra plus jamais à jour).
-- Lister les verrous : `dnf versionlock list`
-- Supprimer le verrou : `dnf versionlock delete httpd`
-- Tout nettoyer : `dnf versionlock clear`
+*Ou via configuration*
+```bash
+echo "exclude=httpd*" >> /etc/dnf/dnf.conf
+```
 
 #### Checklist Dépannage (Troubleshooting)
 
@@ -189,3 +190,25 @@ En cas d'erreur liée à la gestion des paquets ou aux dépôts, commencez par c
 - `dnf makecache` : Recréer le cache
 
 
+| Fichier                  | Usage                                     |
+| ------------------------ | ----------------------------------------- |
+| `/var/log/dnf.log`       | Historique des opérations DNF             |
+| `/var/log/dnf.rpm.log`   | Opérations RPM via DNF                    |
+| `/var/cache/dnf/`        | Cache des paquets                         |
+| `/usr/lib/sysimage/rpm/` | Base de données RPM                       |
+| `/etc/dnf/protected.d/`  | Paquets protégés (impossible à supprimer) |
+
+
+
+Pro Tips :
+
+    En examen, toujours -y pour éviter les prompts
+    Jamais rpm -i pour installer depuis un repo (perd les dépendances)
+    Toujours reset un module avant de changer de stream
+    Clean all si comportement étrange (cache corrompu)
+    Simulation avec --assumeno avant action critique
+    Versionlock pour préserver configuration de l'examen
+    Variables $releasever et $basearch pour portabilité
+    GPG : toujours vérifier les paquets signés (sauf repo local temporaire)
+    Protection : vérifier /etc/dnf/protected.d/ avant suppression
+    Autocomplétion : dnf install <TAB><TAB> pour explorer

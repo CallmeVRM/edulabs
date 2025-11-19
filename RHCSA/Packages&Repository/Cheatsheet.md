@@ -52,6 +52,10 @@ DNF (Dandified YUM) est le gestionnaire de paquets moderne pour RHEL 8/9/10. Uti
 - `dnf upgrade` Mettre à jour tout l'OS. Alias de `update` ; met l'OS à jour.
 - `dnf remove <paquet>` Supprimer un paquet. Supprime aussi les dépendances inutilisées.
 - `dnf downgrade <paquet>`  Downgrader un paquet - revient à la version précédente.
+- `dnf update --bugfix` - Mettre à jour uniquement les paquets avec des corrections de bugs (pas de nouvelles fonctionnalités).
+- `dnf update --security` - Seulement les paquets avec des mises à jour de sécurité.
+- `dnf check-update`   Vérifier les mises à jour disponibles sans les installer.
+
 
 
 **Fonctions Avancées (Le "Plus Complet")**
@@ -71,6 +75,11 @@ Utilisez ces commandes pour rechercher des paquets, lister les paquets disponibl
 - `dnf search all "web server"`   Rechercher tous les paquets correspondant à "web server".  
 - `dnf list available`   Lister tous les paquets disponibles.  
 - `dnf list installed`   Lister tous les paquets installés.  
+- `dnf info <paquet>`   Voir les détails d'un paquet spécifique.
+- `dnf list <paquet>` Lister un paquet spécifique.
+
+
+
 
 **LA COMMANDE : provides**
 
@@ -82,15 +91,18 @@ Cas : "Installez l'outil qui génère le fichier /etc/mime.types"
 
 Astuce RHEL 10 : Tu peux utiliser des jokers. dnf provides */semanage (Trouve le binaire peu importe où il est rangé).
 
+- `dnf provides /chemin/fichier` : Quel paquet fournit ce fichier ?
+- `dnf provides '*/commande'` (trouve le paquet qui fournit cette commande, peu importe où elle est rangée).
+
 #### Groupes & Environnements
 
 Les groupes d'installation permettent de déployer un ensemble de paquets pour un environnement spécifique (ex. server avec GUI, outils dev). On peut inclure les paquets optionnels si besoin.
 
 - `dnf group list -v`   Lister les groupes (IDs inclus), (Le `-v` est crucial pour voir les IDs techniques comme `development`).  
-- `dnf group install "Server with GUI"`   Installer un groupe de paquets, ici "Server with GUI".  
+- `dnf group install|remove "Server with GUI"`   Installer un groupe de paquets, ici "Server with GUI".  
 - `dnf group install --with-optional "Development Tools"`   Installer les paquets obligatoires ET optionnels d'un groupe.  
 - `dnf group info "Development Tools"`   Voir le contenu d'un groupe.  
-
+- `dnf mark install package` # Marquer un paquet comme installé manuellement (empêche la suppression automatique).
 
 #### Historique & Rollback
 
@@ -99,23 +111,26 @@ DNF conserve un historique des transactions qui permet d'annuler ou de revenir e
 - `dnf history`   Voir l'historique des transactions DNF.  
 - `dnf history info <ID>`   Voir les détails d'une transaction spécifique.  
 - `dnf history undo <ID>`   Annuler une transaction spécifique.  
-- `dnf history rollback <ID>`   (Annule TOUT ce qui s'est passé après la transaction 5)  
+- `dnf history redo <ID>`   Annuler une transaction spécifique.  
+- `dnf history rollback <ID>`   (Annule TOUT ce qui s'est passé après la transaction ex. ID="5").
+- `dnf history rollback 10..15`   Annuler transactions 10 à 15. 
 
-#### RPM (Bas Niveau & Intégrité)
+
+#### RPM (Bas Niveau & Intégrité) à corriger
 
 RPM est l'outil bas-niveau pour manipuler les fichiers `.rpm` : inspection, installation à bas niveau et vérification de l'intégrité.
-- `rpm -ivh <paquet.rpm>`   Installer un paquet RPM (bas niveau).  
-- `rpm -Uvh <paquet.rpm>`   Mettre à jour ou installer un paquet RPM (bas niveau).  
-- `rpm -e <paquet>`   Supprimer un paquet RPM (bas niveau).  
-- `rpm -q <paquet>`   Vérifier si un paquet est installé.  
-- `rpm -qa   grep <motif>`   Lister tous les paquets installés correspondant au motif.  
-- `rpm -V <paquet>`   Vérifier l'intégrité d'un paquet installé  
-- `rpm -qi <paquet>`   Afficher la description et la version  
-- `rpm -ql <paquet>`   Où sont les fichiers installés par ce paquet ?  
-- `rpm -qc <paquet>`   Où sont les fichiers de configuration de ce paquet?  
-- `rpm -qd <paquet>`   Où sont les fichiers de documentation de ce paquet ?  
-- `rpm -qf <fichier>`   À quel paquet appartient ce fichier (ex. rpm -qf /bin/ls) ?  
-- `rpm -q --scripts <pkg>`   Afficher les scripts d'installation/désinstallation d'un paquet  
+- `rpm -ivh <paquet.rpm>`           Installer un paquet RPM en mode bas niveau.
+- `rpm -Uvh <paquet.rpm>`           Mettre à jour un paquet existant ou l’installer s’il n’est pas présent.
+- `rpm -e <paquet>`                 Désinstaller un paquet installé. 
+- `rpm -q <paquet>`                 Vérifier si un paquet est installé et afficher sa version. 
+- `rpm -qa   grep <motif>`          Lister tous les paquets installés, filtrés par motif.
+- `rpm -V <paquet>`                 Vérifier l’intégrité d’un paquet installé (fichiers modifiés, permissions, taille…).  
+- `rpm -qi <paquet>`                Afficher les informations détaillées du paquet (description, version, vendor…).  
+- `rpm -ql <paquet>`                Lister tous les fichiers installés par ce paquet.  
+- `rpm -qc <paquet>`                Lister uniquement les fichiers de configuration installés par ce paquet.  
+- `rpm -qd <paquet>`                Lister les fichiers de documentation associés au paquet.  
+- `rpm -qf <fichier>`               Identifier à quel paquet appartient un fichier donné. (ex. rpm -qf /bin/ls) ?  
+- `rpm -q --scripts <pkg>`          Afficher les scripts associés au cycle de vie du paquet (pre-install, post-install, pre-uninstall, post-uninstall).  
 
 **Requêtes sur fichiers .rpm NON INSTALLÉS**
 
@@ -168,3 +183,9 @@ En cas d'erreur liée à la gestion des paquets ou aux dépôts, commencez par c
 - Commande de la dernière chance : `rpm --rebuilddb`
 - DNF est lent ou buggé
 - Le réflexe absolu : `dnf clean all` suivi de `dnf makecache`.
+
+**Nettoyage et cache**
+- `dnf clean all` : Tout nettoyer (cache, métadonnées)
+- `dnf makecache` : Recréer le cache
+
+

@@ -33,8 +33,7 @@ Sous RHEL 10, config-manager est intégré, donc il n y a pas besoin d'installer
 
 - `dnf config-manager --add-repo <url>` : Ajouter un nouveau dépôt.
 - `dnf config-manager --enable <id>` : Activer un repo 
-
-- `dnf config-manager --disable <id>` :Désactiver un repo 
+- `dnf config-manager --disable <id>` : Désactiver un repo 
 - `dnf repolist` : Lister les actifs 
 - `dnf repolist all` : Lister TOUT 
 - `dnf repolist -v` : Voir infos étendues 
@@ -42,10 +41,9 @@ Sous RHEL 10, config-manager est intégré, donc il n y a pas besoin d'installer
 
 #### Commandes basiques DNF
 
-Note : yum est un alias vers dnf, qui est un alias vers dnf5.
+Note : yum est un alias vers dnf
 
 DNF (Dandified YUM) est le gestionnaire de paquets moderne pour RHEL 8/9/10. Utilisez ces commandes pour les opérations quotidiennes: installer, mettre à jour, réinstaller, supprimer et downgrader des paquets.
-
 
 - `dnf install <paquet>` Pour installer un paquet. Ajouter `-y` pour éviter la confirmation. 
 - `dnf reinstall <paquet>` Réinstaller un paquet - restaure les binaires/configs modifiés.
@@ -57,9 +55,7 @@ DNF (Dandified YUM) est le gestionnaire de paquets moderne pour RHEL 8/9/10. Uti
 - `dnf update --security` - Seulement les paquets avec des mises à jour de sécurité.
 - `dnf check-update`   Vérifier les mises à jour disponibles sans les installer.
 
-
-
-**Fonctions Avancées (Le "Plus Complet")**
+**Fonctions Avancées **
 
 Ces options avancées sont utiles pour des scénarios spécifiques (installation hors-ligne, mise à jour partielle, récupération et téléchargement de paquets).
 
@@ -213,3 +209,27 @@ Pro Tips :
     GPG : toujours vérifier les paquets signés (sauf repo local temporaire)
     Protection : vérifier /etc/dnf/protected.d/ avant suppression
     Autocomplétion : dnf install <TAB><TAB> pour explorer
+
+#### Toujours et toujours ne pas oublier d'utiliser man :
+```bash
+man dnf
+# Ensuite dans le man : 
+/Repoquery Command 
+/History Command 
+/Provides Command 
+/Group Command
+```
+
+**Exemples Repoquery & Groupes**
+`dnf repoquery --groupmember httpd` : Affichera le groupe ou se trouve httpd (web-server).
+```bash
+httpd-2.4.63-4.el10.x86_64
+  @web-server
+```
+Le Symbole @web-server indique le groupe d'installation.
+```bash
+dnf group info "web-server"
+dnf group install "web-server"
+```
+
+

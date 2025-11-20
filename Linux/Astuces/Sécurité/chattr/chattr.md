@@ -5,13 +5,13 @@ grand_parent: Astuces
 nav_order: 1
 ---
 
-## C'est quoi chattr :
+#### C'est quoi chattr :
 `chattr` (pour change attribute) est une commande Linux qui permet de modifier les attributs "spéciaux" d’un fichier ou d’un répertoire, c'est un niveau plus bas que les simples permissions `rwx`.
 
 En gros, là où `chmod` gère qui peut lire/écrire/exécuter, chattr peut imposer des comportements globaux que même root doit respecter… sauf s’il retire l’attribut.
 
 
-### Les usages les plus connus
+##### Les usages les plus connus
 
 Bien qu'il en existe une dizaine, je ne citerais que certains dans ce billet :
 
@@ -19,7 +19,7 @@ Bien qu'il en existe une dizaine, je ne citerais que certains dans ce billet :
 - +a (append only) : Autorise uniquement l’ajout à la fin du fichier (très pratique pour des logs).
 
 
-## Pourquoi j'utilise chattr dès que je peux ?
+##### Pourquoi j'utilise chattr dès que je peux ?
 Sous Linux, les permissions ne sont pas un simple détail technique : elles constituent le garde‑fou qui protège vos fichiers, non seulement contre les acteurs malveillants, mais aussi contre vous‑même… ou contre ce collègue bien intentionné qui, par inadvertance, modifie le mauvais fichier.
 
 Les droits classiques `(Lecture, Écriture, Exécution)` font partie de la première ligne de défense. Mais dans un environnement critique, ils ne suffisent pas : un utilisateur (ou script) disposant des droits sudo pourra tout de même modifier (override) un fichier protégé, même si ses permissions sont en mode `600`.
@@ -30,7 +30,7 @@ En pratique, cela empêche toute modification, même par un utilisateur disposan
 
 C’est une mesure simple mais redoutablement efficace : certains malware ne pourront pas écrire directement dans des fichiers critiques comme /etc/passwd ou /etc/ssh/sshd_config à votre insu.
 
-## Exemple :
+###### Exemple :
 
 Dès que je déploie un serveur, l’un des premiers fichiers que je configure est `/etc/ssh/sshd_config`. En général, j’utilise un template que je pousse via cloud-init ou Ansible. Une fois le fichier en place et les vérifications concluantes (tests de connexion, règles de sécurité validées), je le fige en appliquant un attribut d’immuabilité.
 

@@ -31,12 +31,13 @@ priority=1                      # (Avancé) 1 est la plus haute priorité
 
 Sous RHEL 10, config-manager est intégré, donc il n y a pas besoin d'installer un package supplémentaire.
 
-- Ajouter un repo (URL) `dnf config-manager --add-repo <url>`
-- Activer un repo `dnf config-manager --enable <id>`
-- Désactiver un repo `dnf config-manager --disable <id>`
-- Lister les actifs `dnf repolist`
-- Lister TOUT `dnf repolist all`
-- Voir infos étendues `dnf repolist -v`
+- `dnf config-manager --add-repo <url>` : Ajouter un nouveau dépôt.
+- `dnf config-manager --enable <id>` : Activer un repo 
+
+- `dnf config-manager --disable <id>` :Désactiver un repo 
+- `dnf repolist` : Lister les actifs 
+- `dnf repolist all` : Lister TOUT 
+- `dnf repolist -v` : Voir infos étendues 
 
 
 #### Commandes basiques DNF

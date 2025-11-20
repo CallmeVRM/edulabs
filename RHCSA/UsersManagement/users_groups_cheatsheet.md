@@ -1,8 +1,11 @@
 ---
 title: Cheatsheet - Users & Groups
+parent: UsersManagement
+grand_parent: RHCSA
 nav_order: 2
 parent: RHCSA
 has_children: true
+nav_exclude: false
 ---
 
 # 🔐 CHEATSHEET - Gestion des Utilisateurs et Groupes RHEL/CentOS

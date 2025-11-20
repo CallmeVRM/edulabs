@@ -10,11 +10,6 @@ nav_exclude: false
 
 
 # Brainstorming - Packages & Repository
-## H2 - Hello World
-### H3 - Hello World
-#### H4 - Hello World
-##### H5 - Hello World
-###### H6 - Hello World
 
 ######Repositories par defaut sur RHEL 10 :
 - BaseOS : Tous les paquets sont au format RPM, c'est les paquets fondamentaux nécessaires au fonctionnement de l'OS.

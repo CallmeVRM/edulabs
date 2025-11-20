@@ -108,7 +108,7 @@ DNF conserve un historique des transactions qui permet d'annuler ou de revenir e
 - `dnf history undo <ID>`   Annuler une transaction spécifique.  
 - `dnf history redo <ID>`   Annuler une transaction spécifique.  
 - `dnf history rollback <ID>`   (Annule TOUT ce qui s'est passé après la transaction ex. ID="5").
-- `dnf history rollback 10..15`   Annuler transactions 10 à 15. 
+- `dnf history store <ID>`   Stocker une transaction spécifique, pour la rejouer ensuite avec `dnf history replay <ID>`.
 
 
 #### RPM (Bas Niveau & Intégrité) à corriger

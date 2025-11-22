@@ -184,5 +184,79 @@ chown -R lvolet:lvolet /home/lvolet/.ssh
 - wrapper python pour exécuter les scripts bash et gérer les erreurs + logs.
 
 
+#### Sur la machine proxy (jump): 
+useradd -m -s /bin/bash rundeck
+passwd rundeck
+mkdir ~/.ssh
+chmod 700 ~/.ssh
+touch ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+chown -R rundeck:rundeck ~/.ssh
 
-useradd
+
+#### Sur la machine db.oremis.fr et la machine docker.oremis.fr :
+useradd -m -s /bin/bash rundeck
+passwd rundeck
+
+#### Sur la machine rundeck :
+ssh-keygen -t ed25519 -C "rundeck ssh key"
+
+Host proxy-oremis
+    HostName 188.165.60.41 
+    User rundeck
+    IdentityFile ~/.ssh/id_ed25519
+
+Host db-oremis
+    HostName 10.0.0.108
+    User rundeck
+    ProxyJump proxy-oremis
+    IdentityFile ~/.ssh/id_ed25519
+
+Host docker-oremis
+    HostName 10.0.0.111
+    User rundeck
+    ProxyJump proxy-oremis
+    IdentityFile ~/.ssh/id_ed25519
+
+ssh eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+Entrez le passephrase de la clé privée.
+
+
+Logué avec l'utilisateur rundeck sur le VPS (rundeck)
+Copier manuellement la clé publique de rundeck depuis le vps (/home/rundeck/.ssh/authorized_keys) vers le proxy-oremis dans /home/rundeck/.ssh/authorized_keys.
+La connexion ssh doit fonctionner sans mot de passe entre rundeck@vps et rundeck@proxy-oremis
+
+
+Un mot de passe sera demandé la première fois.
+ssh-copy-id rundeck@db-oremis
+
+Un mot de passe sera demandé la première fois.
+ssh-copy-id rundeck@docker-oremis
+
+#### Commande via ssh pour tester le bon fonctionnement des connexions :
+ssh db-oremis 'hostname'
+doit retourner : db
+
+
+ssh docker-oremis 'hostname'
+doit retourner : docker
+
+#### Script bash pour faire le dump mysql et le transférer sur db.oremis.fr via jump host proxy-oremis
+
+/home/lucas/apps/dump-copy-sql/dump-copy-sql.sh
+
+
+```bash
+#!/bin/bash
+ssh db-oremis 'mysqldump -u USERNAME -p pio > pio_dump.sql'
+ssh db-oremis 'mysql -u USERNAME -p pio-dev < pio_dump.sql'
+```
+
+#### Script bash pour faire le rsync des fichiers de pio.oremis.fr vers pio-dev.oremis.fr via jump host proxy-oremis
+
+```bash
+#!/bin/bash
+ssh docker-oremis 'rsync -av --delete /srv/docker/pio.oremis.fr/volumes/storage/app/public/ /srv/docker/pio-dev.oremis.fr/volumes
+/storage/app/public/'
+```

@@ -162,4 +162,27 @@ ssh -J vrm@jump lotfi@db-docker-02 \
     'docker exec -i mysql-db2 mysql \
     -u root -prootpassword mydatabase < /tmp/initial_dump.sql'
 
-    
+cat /etc/passwd | grep lvolet
+usermod -s /bin/bash lvolet
+cat /etc/passwd | grep lvolet
+
+
+mkdir /home/lvolet/.ssh
+touch /home/lvolet/.ssh/authorized_keys
+chmod 750 -R /home/lvolet/.ssh
+chmod 600 /home/lvolet/.ssh/authorized_keys
+chown -R lvolet:lvolet /home/lvolet/.ssh
+
+
+
+- Créer une identité pour le VPS sur jump, db et docker (rundeck)
+- Créer une jeu de clé et la mettre jump, db et docker
+- Configurer vps (.ssh/config) pour utiliser la clé et le jump host
+- mettre en place la clé et la restreindre.
+- créer le script bash pour faire le dump/import sur db.oremis.fr
+- créer le script bash pour faire le rsync des ficheirs au niveau de docker.oremis.fr
+- wrapper python pour exécuter les scripts bash et gérer les erreurs + logs.
+
+
+
+useradd

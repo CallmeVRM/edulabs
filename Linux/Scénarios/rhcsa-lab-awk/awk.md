@@ -122,14 +122,18 @@ Les Exercices :
 
 25. Utilise le fichier ip_output.txt. Isole et affiche uniquement l'adresse IP 192.168.122.50 (sans le masque /24).
 # (25 Bis) Rajouter plus de lignes (6 interfaces) et filtre pour n'afficher que les IP de celles qui sont UP.
-26. Dans passwd_lab, affiche uniquement les utilisateurs dont le shell est /bin/bash.
+26. Dans passwd_lab, affiche uniquement le nom des utilisateurs dont le shell est /bin/bash.
 27. Dans passwd_lab, compte combien il y a de lignes au total (en utilisant AWK, pas wc).
 28. Dans server.log, affiche le numéro de ligne devant chaque message d'erreur contenant "Failed".
 29. Dans inventory.csv, n'affiche que les noms d'hôtes (col 1) en sautant la première ligne (l'en-tête).
 30. Dans server.log, extrais uniquement les processus (ex: sshd[1234]:) sans le reste de la ligne (colonne 5).
-31. Modifie l'affichage de passwd_lab pour qu'il dise : "L'utilisateur [NOM] utilise le shell [SHELL]" pour chaque ligne.
+31. Modifie l'affichage de passwd_lab pour qu'il dise : "L'utilisateur [NOM] utilise le shell [SHELL]" pour chaque ligne. L'utilisateur avec `'` obligatoirement.
 32. (Bonus nettoyage) Affiche le contenu de inventory.csv, mais remplace toutes les virgules par des tirets - à l'affichage.
 
+
+
+
+## Solutions 
 
 
 
@@ -154,11 +158,42 @@ awk -F, '{print $2}'  inventory.csv | awk -F. '{print $4}'
 18. Affichez les lignes allant de la ligne 2 à la ligne 4 incluse avec leur numéro de ligne.
 awk 'NR>=4 && NR<=6 {print NR, $0}' server.log
 
+26. Dans passwd_lab, affiche uniquement le nom des utilisateurs dont le shell est /bin/bash.
+awk -F: '$NF == "/bin/bash" {print $1}' passwd_lab
+ou
+awk -F: '$7 == "/bin/bash" {print $1}' passwd_lab
+
+
+
+30. (Variante) Dans server.log, extrais uniquement les processus (ex: sshd[1234]:) sans le reste de la ligne (colonne 5) Uniquement le PID.
+
+awk '{gsub(/[^0-9]/,"",$5); print $5}' server.log
+
+
+
+31. Modifie l'affichage de passwd_lab pour qu'il dise : "L'utilisateur [NOM] utilise le shell [SHELL]" pour chaque ligne. L'utilisateur avec `'` obligatoirement.
+awk -F: '{print "L'\''utilisateur " $1 " utilise le shell " $7}' passwd_lab
+
+
+
+32. (Bonus nettoyage) Affiche le contenu de inventory.csv, mais remplace toutes les virgules par des tirets - à l'affichage.
+
+
+
+
+
+
+
+
+
+
+
 
 
 créer une variante de la question 6 Error avec case insensitive donc rajouter une ligne dans le script ...
 Ajouter deux ligne pour d'autres mois pour la question 16
 
+dans un fichier créer une question piège elle des lignes avec certaines 5 d'autres 10 d'autres 7 ... colonnes, le dernier fields représente quelquechose (par exemple le shell /bin/bash), et on doit filtrer en se basant sur le dernier champ, en posant la question
 
 
 

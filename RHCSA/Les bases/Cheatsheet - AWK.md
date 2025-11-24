@@ -5,6 +5,7 @@ nav_order: 2
 parent: Les bases
 grand_parent: RHCSA
 has_children: true
+nav_exclude: true
 ---
 
 ## AWK : Le Cheatsheet de Référence

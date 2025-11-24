@@ -84,9 +84,9 @@ Les Exercices :
 7. Affichez le nombre total de lignes ainsi que le nombre total de chaque colonne dans la ligne correspondante (field). 
 
 
-**I. Gestion des Délimiteurs (Fichier cible : `passwd_lab` et `inventory.csv`)**
+**II. Gestion des Délimiteurs (Fichier cible : `passwd_lab` et `inventory.csv`)**
 
-**Objectif** : Utiliser l'option -F.
+**Objectif** : Manipuler l'option -F.
 
 8. Au niveau du fichier `passwd_lab`, affichez le tout premier champ (nom d'utilisateur).
 9. Dans `passwd_lab`, affichez le nom d'utilisateur (colonne 1) et son Shell (colonne 7), séparé par une double tabulation.
@@ -94,6 +94,45 @@ Les Exercices :
 11. Dans `inventory.csv`, affichez le nom d'hôte (col 1) et le rôle (col 3) dans le format suivant : `Le host web01 à pour rôle Web`
 12. Dans `inventory.csv`, modifiez le séparateur de sortie (OFS) pour que les colonnes extraites soient séparées par des tabulations au lieu d'espaces.
 13. Dans `inventory.csv`, étant donné que tout les ip's font partie du même sous-réseau, affichez uniquement le dernier octet de chaque adresse IP.
+
+**III. Filtrage par Motifs (Fichier cible : `server.log`)**
+
+**Objectif** : Sélectionner les lignes pertinentes.
+
+14. Affichez uniquement les lignes de server.log qui contiennent le mot "Error".
+15. Affichez toutes les lignes qui ne contiennent pas "Error".
+16. Affichez les lignes qui commencent par "Nov".
+17. Affichez uniquement la ligne numéro 5 du fichier server.log.
+18. Affichez les lignes allant de la ligne 2 à la ligne 4 incluse avec leur numéro de ligne.
+19. Affichez uniquement l'heure (colonne 3) pour les lignes contenant "sshd".
+
+**IV. Conditions sur les Valeurs (Fichier cible : `passwd_lab` et `inventory.csv`)**
+
+**Objectif** : Comparer des nombres et des chaînes exactes.
+
+20. Dans passwd_lab, affiche les lignes complètes où l'UID (colonne 3) est supérieur ou égal à 1000.
+21. Dans passwd_lab, affiche uniquement les noms d'utilisateurs (col 1) qui ont un UID (col 3) < 10.
+22. Dans inventory.csv, affiche les lignes où le Rôle (col 3) est exactement égal à "Web".
+23. Dans inventory.csv, affiche les serveurs qui ont plus de 80% d'utilisation disque (col 5 > 80).
+24. (Avancé) Dans inventory.csv, affiche les serveurs qui sont de type "Web" ET qui ont une utilisation disque < 60%.
+
+**V. Scénarios "Sysadmin" (Fichiers mixtes)**
+
+**Objectif** : Parsing complexe et nettoyage.
+
+25. Utilise le fichier ip_output.txt. Isole et affiche uniquement l'adresse IP 192.168.122.50 (sans le masque /24).
+# (25 Bis) Rajouter plus de lignes (6 interfaces) et filtre pour n'afficher que les IP de celles qui sont UP.
+26. Dans passwd_lab, affiche uniquement les utilisateurs dont le shell est /bin/bash.
+27. Dans passwd_lab, compte combien il y a de lignes au total (en utilisant AWK, pas wc).
+28. Dans server.log, affiche le numéro de ligne devant chaque message d'erreur contenant "Failed".
+29. Dans inventory.csv, n'affiche que les noms d'hôtes (col 1) en sautant la première ligne (l'en-tête).
+30. Dans server.log, extrais uniquement les processus (ex: sshd[1234]:) sans le reste de la ligne (colonne 5).
+31. Modifie l'affichage de passwd_lab pour qu'il dise : "L'utilisateur [NOM] utilise le shell [SHELL]" pour chaque ligne.
+32. (Bonus nettoyage) Affiche le contenu de inventory.csv, mais remplace toutes les virgules par des tirets - à l'affichage.
+
+
+
+
 
 
 
@@ -112,10 +151,13 @@ awk '{print NR, NF}' server.log
 13. Dans `inventory.csv`, étant donné que tout les ip's font partie du même sous-réseau, affichez uniquement le dernier octet de chaque adresse IP.
 awk -F, '{print $2}'  inventory.csv | awk -F. '{print $4}'
 
+18. Affichez les lignes allant de la ligne 2 à la ligne 4 incluse avec leur numéro de ligne.
+awk 'NR>=4 && NR<=6 {print NR, $0}' server.log
 
 
 
-
+créer une variante de la question 6 Error avec case insensitive donc rajouter une ligne dans le script ...
+Ajouter deux ligne pour d'autres mois pour la question 16
 
 
 

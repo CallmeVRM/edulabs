@@ -127,6 +127,7 @@ Les Exercices :
 28. Dans server.log, affiche le numéro de ligne devant chaque message d'erreur contenant "Failed".
 29. Dans inventory.csv, n'affiche que les noms d'hôtes (col 1) en sautant la première ligne (l'en-tête).
 30. Dans server.log, extrais uniquement les processus (ex: sshd[1234]:) sans le reste de la ligne (colonne 5).
+30. (Variante) Dans server.log, extrais uniquement les processus (ex: sshd[1234]:) sans le reste de la ligne (colonne 5) Uniquement le PID.
 31. Modifie l'affichage de passwd_lab pour qu'il dise : "L'utilisateur [NOM] utilise le shell [SHELL]" pour chaque ligne. L'utilisateur avec `'` obligatoirement.
 32. (Bonus nettoyage) Affiche le contenu de inventory.csv, mais remplace toutes les virgules par des tirets - à l'affichage.
 
@@ -136,43 +137,250 @@ Les Exercices :
 ## Solutions 
 
 
+###### 1. Affichez uniquement la 1ère colonne (le mois) du fichier server.log.
+
+```bash
+awk '{print $1}' server.log
+```
+
+###### 2. Affichez la date (colonne 2) et l'heure (colonne 3) séparées par une tabulation.
+
+```bash
+awk '{print $2, $3}' server.log
+```
+
+
+###### 3. Affichez l'heure (colonne 3) avant la date (colonne 2 + colonne 1) séparées par des tirets (-).
+
+```bash
+awk '{print $3 "-" $2 "-" $1}' server.log
+```
 
 
 
+###### 4. Affichez l'intégralité du fichier (équivalent à cat).
+
+```bash
 
 
+```
+###### 5. Affichez la chaîne "Log de :" avant le nom du serveur (colonne 4).
+
+```bash
 
 
+```
 
+###### 6. Affichez le dernier mot de chaque ligne de log (la dernière colonne), peu importe la longueur de la ligne.
 
-
-
-
-6. Afficher le nombre total de lignes ainsi que le nombre total de chaque colonne dans la ligne (field). 
+```bash
 awk '{print NR, NF}' server.log
+```
+
+###### 7. Affichez le nombre total de lignes ainsi que le nombre total de chaque colonne dans la ligne correspondante (field). 
+
+```bash
 
 
-13. Dans `inventory.csv`, étant donné que tout les ip's font partie du même sous-réseau, affichez uniquement le dernier octet de chaque adresse IP.
+```
+
+
+###### 8. Au niveau du fichier `passwd_lab`, affichez le tout premier champ (nom d'utilisateur).
+
+```bash
+
+
+```
+
+###### 9. Dans `passwd_lab`, affichez le nom d'utilisateur (colonne 1) et son Shell (colonne 7), 
+séparé par une double tabulation.
+
+```bash
+
+
+```
+
+###### 10. Dans `inventory.csv`, affichez uniquement les adresses IP (colonne 2).
+
+```bash
+
+
+```
+
+###### 11. Dans `inventory.csv`, affichez le nom d'hôte (col 1) et le rôle (col 3) dans le format suivant : `Le host web01 à pour rôle Web`
+
+```bash
+
+
+```
+
+###### 12. Dans `inventory.csv`, modifiez le séparateur de sortie (OFS) pour que les colonnes extraites soient séparées par des tabulations au lieu d'espaces.
+
+```bash
+
+
+```
+
+###### 13. Dans `inventory.csv`, étant donné que tout les ip's font partie du même sous-réseau, affichez uniquement le dernier octet de chaque adresse IP.
+
+```bash
 awk -F, '{print $2}'  inventory.csv | awk -F. '{print $4}'
+```
 
-18. Affichez les lignes allant de la ligne 2 à la ligne 4 incluse avec leur numéro de ligne.
+###### 14. Affichez uniquement les lignes de server.log qui contiennent le mot "Error".
+
+```bash
+
+
+```
+
+###### 15. Affichez toutes les lignes qui ne contiennent pas "Error".
+
+```bash
+
+
+```
+
+###### 16. Affichez les lignes qui commencent par "Nov".
+
+```bash
+
+
+```
+
+###### 17. Affichez uniquement la ligne numéro 5 du fichier server.log.
+
+```bash
+
+
+```
+
+###### 18. Affichez les lignes allant de la ligne 2 à la ligne 4 incluse avec leur numéro de ligne.
+
+```bash
 awk 'NR>=4 && NR<=6 {print NR, $0}' server.log
+```
 
-26. Dans passwd_lab, affiche uniquement le nom des utilisateurs dont le shell est /bin/bash.
+###### 19. Affichez uniquement l'heure (colonne 3) pour les lignes contenant "sshd".
+
+```bash
+
+
+```
+
+###### 20. Dans passwd_lab, affiche les lignes complètes où l'UID (colonne 3) est supérieur ou égal à 1000.
+
+```bash
+
+
+```
+
+###### 21. Dans passwd_lab, affiche uniquement les noms d'utilisateurs (col 1) qui ont un UID (col 3) < 10.
+
+```bash
+
+
+```
+
+###### 22. Dans inventory.csv, affiche les lignes où le Rôle (col 3) est exactement égal à "Web".
+
+```bash
+
+
+```
+
+###### 23. Dans inventory.csv, affiche les serveurs qui ont plus de 80% d'utilisation disque (col 5 > 80).
+
+```bash
+
+
+```
+
+###### 24. (Avancé) Dans inventory.csv, affiche les serveurs qui sont de type "Web" ET qui ont une utilisation disque < 60%.
+
+```bash
+
+
+```
+
+
+###### 25. Utilise le fichier ip_output.txt. Isole et affiche uniquement l'adresse IP 192.168.122.50 (sans le masque /24).
+
+```bash
+
+
+```
+
+# (25 Bis) Rajouter plus de lignes (6 interfaces) et filtre pour n'afficher que les IP de celles qui sont UP.
+
+```bash
+
+
+```
+
+###### 26. Dans passwd_lab, affiche uniquement le nom des utilisateurs dont le shell est /bin/bash.
+
+```bash
 awk -F: '$NF == "/bin/bash" {print $1}' passwd_lab
 ou
 awk -F: '$7 == "/bin/bash" {print $1}' passwd_lab
+```
+
+###### 27. Dans passwd_lab, compte combien il y a de lignes au total (en utilisant AWK, pas wc).
+
+```bash
 
 
+```
 
-30. (Variante) Dans server.log, extrais uniquement les processus (ex: sshd[1234]:) sans le reste de la ligne (colonne 5) Uniquement le PID.
+###### 28. Dans server.log, affiche le numéro de ligne devant chaque message d'erreur contenant "Failed".
 
+```bash
+
+
+```
+
+###### 29. Dans inventory.csv, n'affiche que les noms d'hôtes (col 1) en sautant la première ligne (l'en-tête).
+
+```bash
+
+
+```
+
+###### 30. Dans server.log, extrais uniquement les processus (ex: sshd[1234]:) sans le reste de la ligne (colonne 5).
+
+```bash
+
+
+```
+###### 30. (Variante) Dans server.log, extrais uniquement les processus (ex: sshd[1234]:) sans le reste de la ligne (colonne 5) Uniquement le PID.
+```bash
 awk '{gsub(/[^0-9]/,"",$5); print $5}' server.log
+```
+
+###### 31. Modifie l'affichage de passwd_lab pour qu'il dise : "L'utilisateur [NOM] utilise le shell [SHELL]" pour chaque ligne. L'utilisateur avec `'` obligatoirement.
+
+```bash
+awk -F: '{print "L'\''utilisateur " $1 " utilise le shell " $7}' passwd_lab
+```
+
+###### 32. (Bonus nettoyage) Affiche le contenu de inventory.csv, mais remplace toutes les virgules par des tirets - à l'affichage.
+
+```bash
+awk -F: '{print "L'\''utilisateur " $1 " utilise le shell " $7}' passwd_lab
+```
+- `-v OFS="-"` : On définit le séparateur de sortie (Output Field Separator) comme étant un tiret.
+
+- `$1=$1` : C'est une astuce nécessaire dans AWK. Elle force AWK à "reconstruire" la ligne en utilisant le nouveau OFS. jf
+
+
+
+
+
 
 
 
 31. Modifie l'affichage de passwd_lab pour qu'il dise : "L'utilisateur [NOM] utilise le shell [SHELL]" pour chaque ligne. L'utilisateur avec `'` obligatoirement.
-awk -F: '{print "L'\''utilisateur " $1 " utilise le shell " $7}' passwd_lab
 
 
 

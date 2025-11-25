@@ -1,6 +1,6 @@
 ---
-title: Cheatsheet - Users & Groups
-parent: Users Management
+title: Network Management
+parent: Network Management
 grand_parent: RHCSA
 nav_order: 2
 has_children: true

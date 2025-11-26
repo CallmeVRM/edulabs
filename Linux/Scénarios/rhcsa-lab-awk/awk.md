@@ -1,11 +1,19 @@
-####  Introduction
-Pour le RHCSA, il est crucial de comprendre que AWK n'est pas une fin en soi, mais un outil puissant inclus dans l'objectif "Créer des scripts shell simples" et "Opérer sur des fichiers texte".
+---
+title: Lab-awk
+parent: Scénarios
+grand_parent: Linux
+nav_order: 2
+---
 
-L'examen ne vous demanderez pas de programmer un script AWK complexe, mais plutôt d'utiliser cet outil pour extraire, filtrer et formater des informations système (logs, configuration, sorties de commandes) afin de répondre à un besoin d'administration.
+####  Introduction
+
+AWK est un outil puissant conçu pour la manipulation et l'analyse de données textuelles, particulièrement utile pour les administrateurs système Linux. Il excelle dans le traitement de fichiers structurés en lignes et colonnes, tels que les fichiers de configuration, les journaux système, et les sorties de commandes.
 
 #### Objectif de ce document
 Voici une liste de 30 questions/scénarios, classés par difficulté et logique métier, qui reflètent ce qu'un administrateur système pourrait devoir accomplir lors de l'examen ou dans la vie réelle.
 
+
+###### Mise en place de l'environnement
 
 
 ```bash
@@ -62,6 +70,26 @@ cat << 'EOF' > ip_output.txt
     link/ether 52:54:00:aa:bb:cc brd ff:ff:ff:ff:ff:ff
     inet 192.168.122.50/24 brd 192.168.122.255 scope global dynamic noprefixroute eth0
        valid_lft 3500sec preferred_lft 3500sec
+3: enp6s0f0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN group default qlen 1000
+    link/ether 00:19:99:db:58:87 brd ff:ff:ff:ff:ff:ff
+4: enp6s0f1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN group default qlen 1000
+    link/ether 00:19:99:db:58:86 brd ff:ff:ff:ff:ff:ff
+5: br0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 92:8d:d1:3d:42:bf brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.10/24 metric 100 brd 192.168.1.255 scope global dynamic br0
+       valid_lft 82919sec preferred_lft 82919sec
+    inet6 2a01:cb04:db7:6900:908d:d1ff:fe3d:42bf/64 scope global dynamic mngtmpaddr noprefixroute 
+       valid_lft 86389sec preferred_lft 589sec
+    inet6 fe80::908d:d1ff:fe3d:42bf/64 scope link 
+       valid_lft forever preferred_lft forever
+6: ovs-system: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 1e:c2:2d:c1:58:29 brd ff:ff:ff:ff:ff:ff
+7: br-int: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 56:1c:f8:0b:8f:d5 brd ff:ff:ff:ff:ff:ff
+8: virbr0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether 52:54:00:dd:c7:ee brd ff:ff:ff:ff:ff:ff
+    inet 192.168.122.1/24 brd 192.168.122.255 scope global virbr0
+       valid_lft forever preferred_lft forever
 EOF
 
 echo "Environnement prêt ! Fichiers créés :"
@@ -69,7 +97,7 @@ ls -1 "$LAB_DIR"
 ```
 
 
-Les Exercices :
+##### Les Exercices :
 
 **I. Extraction de base (Fichier cible : server.log)**
 
@@ -134,7 +162,7 @@ Les Exercices :
 
 
 
-## Solutions 
+### Solutions 
 
 
 ###### 1. Affichez uniquement la 1ère colonne (le mois) du fichier server.log.
@@ -156,12 +184,9 @@ awk '{print $2, $3}' server.log
 awk '{print $3 "-" $2 "-" $1}' server.log
 ```
 
-
-
 ###### 4. Affichez l'intégralité du fichier (équivalent à cat).
 
 ```bash
-
 
 ```
 ###### 5. Affichez la chaîne "Log de :" avant le nom du serveur (colonne 4).

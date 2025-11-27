@@ -14,6 +14,6 @@ _site/
 .bundle/
 vendor/
 
-./Linux/Astuces/Ssh/sujets/sql-dump-upload-ssh.md
-sql-dump-upload-ssh.md
+
 Linux/Astuces/Ssh/sujets/sql-dump-upload-ssh.md
+Articles/Azure/Architecture/Nextcloud-Onlyoffice.md
